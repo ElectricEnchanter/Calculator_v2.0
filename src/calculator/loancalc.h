@@ -2,21 +2,35 @@
 #define LOANCALC_H
 
 #include <QDialog>
+#include <QMainWindow>
+#include <QTimer>
+#include <QVector>
+#include <QtMath>
+
+#include "ui_loancalc.h"
 
 namespace Ui {
 class LoanCalc;
 }
 
-class LoanCalc : public QDialog
-{
-    Q_OBJECT
+class LoanCalc : public QDialog {
+  Q_OBJECT
 
-public:
-    explicit LoanCalc(QWidget *parent = nullptr);
-    ~LoanCalc();
+ public:
+  explicit LoanCalc(QWidget *parent = nullptr);
+  ~LoanCalc();
+  QCPBars *procents;
+  QCPBars *restSum;
 
-private:
-    Ui::LoanCalc *ui;
+ private slots:
+  void on_equalButton_clicked();
+
+  void on_eraseButton_clicked();
+
+  void on_exitButton_clicked();
+
+ private:
+  Ui::LoanCalc *ui;
 };
 
-#endif // LOANCALC_H
+#endif  // LOANCALC_H

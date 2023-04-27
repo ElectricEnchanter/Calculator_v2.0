@@ -377,7 +377,7 @@ QPushButton:pressed {
           <string>График</string>
          </property>
          <property name="icon">
-          <iconset resource="../assets/icons/icons.qrc">
+          <iconset resource="../../assets/icons/icons.qrc">
            <normaloff>:/monitoring.png</normaloff>:/monitoring.png</iconset>
          </property>
          <property name="iconSize">
@@ -418,7 +418,7 @@ QPushButton:pressed {
           <string>Кредит</string>
          </property>
          <property name="icon">
-          <iconset resource="../assets/icons/icons.qrc">
+          <iconset resource="../../assets/icons/icons.qrc">
            <normaloff>:/credit_card.png</normaloff>:/credit_card.png</iconset>
          </property>
          <property name="iconSize">
@@ -459,7 +459,7 @@ QPushButton:pressed {
           <string>Депозит</string>
          </property>
          <property name="icon">
-          <iconset resource="../assets/icons/icons.qrc">
+          <iconset resource="../../assets/icons/icons.qrc">
            <normaloff>:/savings.png</normaloff>:/savings.png</iconset>
          </property>
          <property name="iconSize">
@@ -572,7 +572,7 @@ border:none</string>
            <string/>
           </property>
           <property name="icon">
-           <iconset resource="../assets/icons/icons.qrc">
+           <iconset resource="../../assets/icons/icons.qrc">
             <normaloff>:/outline_more_vert.png</normaloff>:/outline_more_vert.png</iconset>
           </property>
           <property name="iconSize">
@@ -1251,7 +1251,7 @@ QPushButton:pressed {
            <string/>
           </property>
           <property name="icon">
-           <iconset resource="../assets/icons/icons.qrc">
+           <iconset resource="../../assets/icons/icons.qrc">
             <normaloff>:/backspace.png</normaloff>:/backspace.png</iconset>
           </property>
           <property name="iconSize">
@@ -1876,7 +1876,7 @@ border:none</string>
   </widget>
  </widget>
  <resources>
-  <include location="../assets/icons/icons.qrc"/>
+  <include location="../../assets/icons/icons.qrc"/>
  </resources>
  <connections/>
  <buttongroups>
