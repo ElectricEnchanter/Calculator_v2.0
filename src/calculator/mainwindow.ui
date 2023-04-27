@@ -1880,7 +1880,7 @@ border:none</string>
  </resources>
  <connections/>
  <buttongroups>
-  <buttongroup name="digit"/>
   <buttongroup name="digit2"/>
+  <buttongroup name="digit"/>
  </buttongroups>
 </ui>

@@ -1,11 +1,18 @@
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 
-#include <QMainWindow>
+#include <depcalc.h>
+#include <graph.h>
+#include <loancalc.h>
+#include <math.h>
+#include <stdio.h>
 
-#include "depcalc.h"
-#include "graph.h"
-#include "loancalc.h"
+#include <QAbstractButton>
+#include <QButtonGroup>
+#include <QKeyEvent>
+#include <QMainWindow>
+#include <QResource>
+#include <QVector>
 
 QT_BEGIN_NAMESPACE
 namespace Ui {
@@ -30,7 +37,7 @@ class MainWindow : public QMainWindow {
  private:
   Ui::MainWindow *ui;
   Graph graph;
-  DepCalc depCalc;
-  LoanCalc loanCalc;
+  LoanCalc loancalc;
+  DepCalc depcalc;
 };
 #endif  // MAINWINDOW_H

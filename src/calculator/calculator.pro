@@ -1,4 +1,4 @@
-QT       += core gui
+QT       += core gui printsupport
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
@@ -13,19 +13,23 @@ SOURCES += \
     graph.cpp \
     loancalc.cpp \
     main.cpp \
-    mainwindow.cpp
+    mainwindow.cpp \
+    qcustomplot.cpp
 
 HEADERS += \
     depcalc.h \
     graph.h \
     loancalc.h \
-    mainwindow.h
+    mainwindow.h \
+    qcustomplot.h
 
 FORMS += \
     depcalc.ui \
     graph.ui \
     loancalc.ui \
     mainwindow.ui
+
+#macx: ICON = ../../assets/icons/icon.icns
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin

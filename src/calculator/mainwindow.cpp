@@ -1,9 +1,7 @@
 #include "mainwindow.h"
 
-#include "depcalc.h"
-#include "graph.h"
-#include "loancalc.h"
 #include "ui_mainwindow.h"
+
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent), ui(new Ui::MainWindow) {
   ui->setupUi(this);
@@ -18,13 +16,13 @@ void MainWindow::on_Graph_clicked() {
 }
 
 void MainWindow::on_Credit_clicked() {
-  loanCalc.setModal(true);
-  loanCalc.setWindowTitle("КРЕДИТНЫЙ");
-  loanCalc.exec();
+  loancalc.setModal(true);
+  loancalc.setWindowTitle("КРЕДИТ");
+  loancalc.exec();
 }
 
 void MainWindow::on_Deposit_clicked() {
-  depCalc.setModal(true);
-  depCalc.setWindowTitle("ДЕПОЗИТНЫЙ");
-  depCalc.exec();
+  depcalc.setModal(true);
+  depcalc.setWindowTitle("ДЕПОЗИТ");
+  depcalc.exec();
 }
