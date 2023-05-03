@@ -1,9 +1,9 @@
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 
-#include <depcalc.h>
-#include <graph.h>
-#include <loancalc.h>
+#include "depcalc.h"
+#include "graph.h"
+#include "loancalc.h"
 #include <math.h>
 #include <stdio.h>
 
