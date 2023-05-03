@@ -15,25 +15,71 @@
   </property>
   <layout class="QVBoxLayout" name="verticalLayout_2">
    <item>
-    <layout class="QGridLayout" name="gridLayout">
+    <layout class="QGridLayout" name="gridLayout" rowstretch="0,0,0,0,0,0,0,0">
+     <property name="leftMargin">
+      <number>12</number>
+     </property>
+     <property name="topMargin">
+      <number>0</number>
+     </property>
+     <property name="rightMargin">
+      <number>12</number>
+     </property>
+     <property name="bottomMargin">
+      <number>0</number>
+     </property>
+     <property name="horizontalSpacing">
+      <number>-1</number>
+     </property>
+     <property name="verticalSpacing">
+      <number>7</number>
+     </property>
+     <item row="2" column="1">
+      <widget class="QLineEdit" name="inputRate">
+       <property name="focusPolicy">
+        <enum>Qt::ClickFocus</enum>
+       </property>
+      </widget>
+     </item>
      <item row="6" column="0">
       <widget class="QLabel" name="label_7">
        <property name="text">
-        <string>TextLabel</string>
+        <string>Долг + проценты:</string>
        </property>
       </widget>
      </item>
-     <item row="1" column="0">
-      <widget class="QLabel" name="label_2">
+     <item row="4" column="0">
+      <widget class="QLabel" name="label_5">
        <property name="text">
-        <string>TextLabel</string>
+        <string>Ежемесячный платеж:</string>
        </property>
       </widget>
      </item>
-     <item row="0" column="0">
-      <widget class="QLabel" name="label">
+     <item row="1" column="1">
+      <widget class="QLineEdit" name="inputTerm">
+       <property name="focusPolicy">
+        <enum>Qt::ClickFocus</enum>
+       </property>
+      </widget>
+     </item>
+     <item row="4" column="1">
+      <widget class="QLabel" name="outputAccrInter">
        <property name="text">
-        <string>TextLabel</string>
+        <string/>
+       </property>
+      </widget>
+     </item>
+     <item row="6" column="1">
+      <widget class="QLabel" name="outputSumDebtInter">
+       <property name="text">
+        <string/>
+       </property>
+      </widget>
+     </item>
+     <item row="5" column="1">
+      <widget class="QLabel" name="outputMonPay">
+       <property name="text">
+        <string/>
        </property>
       </widget>
      </item>
@@ -51,87 +97,99 @@
        </item>
       </widget>
      </item>
+     <item row="0" column="0">
+      <widget class="QLabel" name="label">
+       <property name="acceptDrops">
+        <bool>false</bool>
+       </property>
+       <property name="text">
+        <string>Сумма кредита:</string>
+       </property>
+      </widget>
+     </item>
+     <item row="1" column="0">
+      <widget class="QLabel" name="label_2">
+       <property name="text">
+        <string>Срок кредита (мес):</string>
+       </property>
+      </widget>
+     </item>
      <item row="3" column="0">
       <widget class="QLabel" name="label_4">
        <property name="text">
-        <string>TextLabel</string>
-       </property>
-      </widget>
-     </item>
-     <item row="2" column="1">
-      <widget class="QLineEdit" name="inputRate"/>
-     </item>
-     <item row="2" column="0">
-      <widget class="QLabel" name="label_3">
-       <property name="text">
-        <string>TextLabel</string>
-       </property>
-      </widget>
-     </item>
-     <item row="6" column="1">
-      <widget class="QLabel" name="outputSumDebtInter">
-       <property name="text">
-        <string>TextLabel</string>
-       </property>
-      </widget>
-     </item>
-     <item row="4" column="0">
-      <widget class="QLabel" name="label_5">
-       <property name="text">
-        <string>TextLabel</string>
-       </property>
-      </widget>
-     </item>
-     <item row="5" column="1">
-      <widget class="QLabel" name="outputMonPay">
-       <property name="text">
-        <string>TextLabel</string>
-       </property>
-      </widget>
-     </item>
-     <item row="1" column="1">
-      <widget class="QLineEdit" name="inputTerm"/>
-     </item>
-     <item row="0" column="1">
-      <widget class="QLineEdit" name="inputSum"/>
-     </item>
-     <item row="5" column="0">
-      <widget class="QLabel" name="label_6">
-       <property name="text">
-        <string>TextLabel</string>
-       </property>
-      </widget>
-     </item>
-     <item row="4" column="1">
-      <widget class="QLabel" name="outputAccrInter">
-       <property name="text">
-        <string>TextLabel</string>
+        <string>Тип ежемесячных платежей:</string>
        </property>
       </widget>
      </item>
      <item row="7" column="0">
       <widget class="QPushButton" name="eraseButton">
        <property name="text">
-        <string>PushButton</string>
+        <string/>
+       </property>
+       <property name="icon">
+        <iconset resource="../../assets/icons/icons.qrc">
+         <normaloff>:/backspace.png</normaloff>:/backspace.png</iconset>
        </property>
       </widget>
      </item>
      <item row="7" column="1">
       <widget class="QPushButton" name="equalButton">
+       <property name="layoutDirection">
+        <enum>Qt::RightToLeft</enum>
+       </property>
        <property name="text">
-        <string>PushButton</string>
+        <string>Рассчитать</string>
+       </property>
+       <property name="icon">
+        <iconset resource="../../assets/icons/icons.qrc">
+         <normaloff>:/calculate.png</normaloff>:/calculate.png</iconset>
+       </property>
+      </widget>
+     </item>
+     <item row="0" column="1">
+      <widget class="QLineEdit" name="inputSum">
+       <property name="focusPolicy">
+        <enum>Qt::ClickFocus</enum>
+       </property>
+       <property name="acceptDrops">
+        <bool>true</bool>
+       </property>
+      </widget>
+     </item>
+     <item row="2" column="0">
+      <widget class="QLabel" name="label_3">
+       <property name="text">
+        <string>Процентная ставка:</string>
+       </property>
+      </widget>
+     </item>
+     <item row="5" column="0">
+      <widget class="QLabel" name="label_6">
+       <property name="text">
+        <string>Начисленные проценты:</string>
        </property>
       </widget>
      </item>
     </layout>
    </item>
    <item>
-    <widget class="QCustomPlot" name="widget" native="true"/>
+    <widget class="QCustomPlot" name="widget" native="true">
+     <property name="cursor">
+      <cursorShape>OpenHandCursor</cursorShape>
+     </property>
+    </widget>
    </item>
    <item>
     <widget class="QPushButton" name="exitButton">
+     <property name="layoutDirection">
+      <enum>Qt::RightToLeft</enum>
+     </property>
      <property name="text">
-      <string>PushButton</string>
+      <string>Выйти</string>
+     </property>
+     <property name="icon">
+      <iconset resource="../../assets/icons/icons.qrc">
+       <normaloff>:/close.png</normaloff>:/close.png</iconset>
      </property>
     </widget>
    </item>
@@ -145,6 +203,8 @@
    <container>1</container>
   </customwidget>
  </customwidgets>
- <resources/>
+ <resources>
+  <include location="../../assets/icons/icons.qrc"/>
+ </resources>
  <connections/>
 </ui>

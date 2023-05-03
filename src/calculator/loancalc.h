@@ -31,6 +31,9 @@ class LoanCalc : public QDialog {
 
  private:
   Ui::LoanCalc *ui;
+  QVector<double> ticks;
+  QVector<QString> labels;
+  QVector<QString> mesac;
 };
 
 #endif  // LOANCALC_H

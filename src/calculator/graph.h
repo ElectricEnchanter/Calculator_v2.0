@@ -7,16 +7,20 @@ namespace Ui {
 class Graph;
 }
 
-class Graph : public QDialog
-{
-    Q_OBJECT
+class Graph : public QDialog {
+  Q_OBJECT
 
-public:
-    explicit Graph(QWidget *parent = nullptr);
-    ~Graph();
+ public:
+  explicit Graph(QWidget *parent = nullptr);
+  ~Graph();
 
-private:
-    Ui::Graph *ui;
+ private slots:
+  void on_exit_clicked();
+
+  void on_erase_clicked();
+
+ private:
+  Ui::Graph *ui;
 };
 
-#endif // GRAPH_H
+#endif  // GRAPH_H

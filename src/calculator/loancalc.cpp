@@ -24,9 +24,6 @@ void LoanCalc::on_equalButton_clicked() {
       ui->inputRate->text().isEmpty()) {
   } else {
     ui->widget->clearGraphs();
-    QVector<double> ticks;
-    QVector<QString> labels;
-    QVector<QString> mesac;
 
     double ostat = atof(ui->inputSum->text().toLocal8Bit());
     int month = atof(ui->inputTerm->text().toLocal8Bit());
@@ -177,6 +174,9 @@ void LoanCalc::on_eraseButton_clicked() {
   ui->inputSum->setText("");
   ui->inputTerm->setText("");
   ui->inputRate->setText("");
+  ui->outputAccrInter->setText("");
+  ui->outputSumDebtInter->setText("");
+  ui->outputMonPay->setText("");
 }
 
 void LoanCalc::on_exitButton_clicked() { this->close(); }
