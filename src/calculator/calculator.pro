@@ -21,4 +21,4 @@ SOURCES += depcalc.cpp \
            loancalc.cpp \
            main.cpp \
            mainwindow.cpp \
-           qcustomplot.cpp
+           ../third_party/qcustomplot.cpp

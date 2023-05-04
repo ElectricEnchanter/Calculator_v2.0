@@ -1,5 +1,6 @@
 #include "depcalc.h"
 
+#include "../SmartCalc_v2.0.h"
 #include "ui_depcalc.h"
 
 DepCalc::DepCalc(QWidget *parent) : QDialog(parent), ui(new Ui::DepCalc) {
@@ -29,31 +30,31 @@ void DepCalc::on_periodEndInputButton_clicked() {
 }
 
 void DepCalc::on_calendarWidget_clicked(const QDate &date) {
-  if (ui->periodStartInputButton->text() == "yyyy.mm.dd") {
-    ui->periodStartInputButton->setText(date.toString("yyyy.MM.dd"));
-    ui->periodStartInputButton->setStyleSheet("color:#FFFFFF");
+  if (ui->periodStartInputLabel->text() == "yyyy.mm.dd") {
+    ui->periodStartInputLabel->setText(date.toString("yyyy.MM.dd"));
+    ui->periodStartInputLabel->setStyleSheet("color:#FFFFFF");
   } else {
-    ui->periodEndInputButton->setText(date.toString("yyyy.MM.dd"));
-    ui->periodEndInputButton->setStyleSheet("color:#FFFFFF");
+    ui->periodEndInputLabel->setText(date.toString("yyyy.MM.dd"));
+    ui->periodEndInputLabel->setStyleSheet("color:#FFFFFF");
   }
   ui->calendarWidget->hide();
 }
 
 void DepCalc::on_eraseButton_clicked() {
+  ui->tableWidget->clear();
+  ui->endAmountOutput->setText("");
   ui->depAmountInput->setText("");
-  ui->periodStartInputButton->setText("");
-  ui->periodEndInputButton->setText("");
   ui->interRateInput->setText("");
-  ui->periodStartInputButton->setText("yyyy.mm.dd");
-  ui->periodEndInputButton->setText("yyyy.mm.dd");
-  ui->periodStartInputButton->setStyleSheet("color:#00796B");
-  ui->periodEndInputButton->setStyleSheet("color:#00796B");
+  ui->periodStartInputLabel->setText("yyyy.mm.dd");
+  ui->periodEndInputLabel->setText("yyyy.mm.dd");
+  ui->periodStartInputLabel->setStyleSheet("color:#00796B");
+  ui->periodEndInputLabel->setStyleSheet("color:#00796B");
 }
 
 void DepCalc::on_equalButton_clicked() {
-  QByteArray ar = (ui->periodStartInputButton->text().toLocal8Bit());
+  QByteArray ar = (ui->periodStartInputLabel->text().toLocal8Bit());
   char *inputStart = ar.data();
-  QByteArray ar2 = (ui->periodEndInputButton->text().toLocal8Bit());
+  QByteArray ar2 = (ui->periodEndInputLabel->text().toLocal8Bit());
   char *inputEnd = ar2.data();
 
   if (ui->depAmountInput->text().isEmpty() ||
@@ -72,8 +73,8 @@ void DepCalc::on_equalButton_clicked() {
     double depAmount2 = depAmount;
     int payoutCount = 0;
     int y, m, d, y1, m1, d1;
-    int days = 365;
-    //          int days = ymd_to_mord(inputEnd) - ymd_to_mord(inputStart) - 1;
+    // int days = 365;
+    int days = YmdToMord(inputEnd) - YmdToMord(inputStart) - 1;
     sscanf(inputStart, "%d.%d.%d", &y, &m, &d);
     sscanf(inputEnd, "%d.%d.%d", &y1, &m1, &d1);
     QVector<QString> labels;

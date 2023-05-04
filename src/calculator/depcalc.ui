@@ -40,7 +40,7 @@
         </widget>
        </item>
        <item>
-        <widget class="QLabel" name="label_3">
+        <widget class="QLabel" name="periodStartInputLabel">
          <property name="text">
           <string>yyyy.mm.dd</string>
          </property>
@@ -52,11 +52,14 @@
           <string/>
          </property>
          <property name="icon">
-          <iconset resource="../../assets/icons/icons.qrc">
+          <iconset>
            <normaloff>:/outline_event_black.png</normaloff>:/outline_event_black.png</iconset>
          </property>
          <property name="checkable">
           <bool>true</bool>
+         </property>
+         <property name="checked">
+          <bool>false</bool>
          </property>
         </widget>
        </item>
@@ -74,7 +77,7 @@
         <string>Расчитать</string>
        </property>
        <property name="icon">
-        <iconset resource="../../assets/icons/icons.qrc">
+        <iconset>
          <normaloff>:/calculate.png</normaloff>:/calculate.png</iconset>
        </property>
       </widget>
@@ -96,7 +99,7 @@
         </widget>
        </item>
        <item>
-        <widget class="QLabel" name="label_5">
+        <widget class="QLabel" name="periodEndInputLabel">
          <property name="text">
           <string>yyyy.mm.dd</string>
          </property>
@@ -108,11 +111,14 @@
           <string/>
          </property>
          <property name="icon">
-          <iconset resource="../../assets/icons/icons.qrc">
+          <iconset>
            <normaloff>:/outline_event_black.png</normaloff>:/outline_event_black.png</iconset>
          </property>
          <property name="checkable">
           <bool>true</bool>
+         </property>
+         <property name="checked">
+          <bool>false</bool>
          </property>
         </widget>
        </item>
@@ -124,7 +130,7 @@
         <string/>
        </property>
        <property name="icon">
-        <iconset resource="../../assets/icons/icons.qrc">
+        <iconset>
          <normaloff>:/backspace.png</normaloff>:/backspace.png</iconset>
        </property>
       </widget>
@@ -210,15 +216,13 @@
       <string>Выйти</string>
      </property>
      <property name="icon">
-      <iconset resource="../../assets/icons/icons.qrc">
+      <iconset>
        <normaloff>:/close.png</normaloff>:/close.png</iconset>
      </property>
     </widget>
    </item>
   </layout>
  </widget>
- <resources>
-  <include location="../../assets/icons/icons.qrc"/>
- </resources>
+ <resources/>
  <connections/>
 </ui>

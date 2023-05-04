@@ -28,17 +28,26 @@ else()
 endif()
 
 set(PROJECT_SOURCES
-        ../calculator/main.cpp
-        ../calculator/mainwindow.cpp
-        ../calculator/mainwindow.h
-        ../calculator/mainwindow.ui
-        ../calculator/graph.ui
-        ../calculator/graph.cpp
-        ../calculator/loancalc.ui
-        ../calculator/loancalc.cpp
-        ../calculator/depcalc.ui
-        ../calculator/depcalc.cpp
+        calculator/main.cpp
+        calculator/mainwindow.cpp
+        calculator/mainwindow.h
+        calculator/mainwindow.ui
+        SmartCalc_v2.0.cc
+        SmartCalc_v2.0.h
+        calculator/graph.ui
+        calculator/graph.h
+        calculator/graph.cpp
+        calculator/loancalc.ui
+        calculator/loancalc.cpp
+        calculator/loancalc.h
+        calculator/depcalc.ui
+        calculator/depcalc.cpp
+        calculator/depcalc.h
+        ../assets/icons/icons.qrc
+
 )
+
+# вернуть ../calculator/main.cpp
 
 set(PROJECT_BUILD_OUTPUT ${CMAKE_SOURCE_DIR}/build/output/${PROJECT_ARCH_TARGET}/${CMAKE_BUILD_TYPE})
 SET(EXECUTABLE_OUTPUT_PATH ${PROJECT_BUILD_OUTPUT}/bin)
