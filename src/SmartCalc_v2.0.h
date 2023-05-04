@@ -4,6 +4,21 @@
 #include <cmath>
 #include <iostream>
 
+// namespace s21{
+// 	class Numbers {
+// 		private:
+// 		double number;
+// 		Numbers *next;
+// };
+
+// 	class Operations {
+// 		private:
+// 		double Operator;
+// 		Operations *next;
+// 	};
+// };
+
+
 
 int YmdToMord(char *date);
 

@@ -55,10 +55,21 @@ SET(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${PROJECT_BUILD_OUTPUT}/third_party)
 SET(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${PROJECT_BUILD_OUTPUT}/third_party)
 SET(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${PROJECT_BUILD_OUTPUT}/third_party)
 
+#set(MACOSX_BUNDLE_ICON_FILE ../assets/icons/icon.icns)
+#set(MACOSX_BUNDLE TRUE)
+#set(app_icon_macos "../assets/icons/icon.icns")
+#set_source_files_properties(${app_icon_macos} PROPERTIES MACOSX_PACKAGE_LOCATION "Resources")
+ 
+#qt_add_executable(SmartCalc1 MACOSX_BUNDLE  ${app_icon_macos})
+
+#set(MACOSX_BUNDLE_INFO_PLIST ${CMAKE_CURRENT_SOURCE_DIR}/Info.plist)
+#set_source_files_properties(${CMAKE_CURRENT_SOURCE_DIR}/Info.plist PROPERTIES MACOSX_PACKAGE_LOCATION Resources)
 
 if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
     qt_add_executable(SmartCalc
         MANUAL_FINALIZATION
+        MACOSX_BUNDLE
+        ${app_icon_macos}
         ${PROJECT_SOURCES}
     )
 
