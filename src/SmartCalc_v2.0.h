@@ -10,7 +10,17 @@
 #include <functional>
 #include <variant>
 
-enum Type {
+
+
+namespace s21{
+	using unary_function = std::function<double(double)>;
+	using binary_function = std::function<double(double,double)>;
+	using function_variant = std::variant<double, unary_function, binary_function, nullptr_t>;
+
+	void CreateTokenMap(std::map<std::string, s21::function_variant> &token_map);
+	void Validator(std::string input, std::string output);
+
+	enum Type {
 	kNumber,
 	kBinaryOperator,
 	kUnaryPrefixOperator,
@@ -36,14 +46,10 @@ enum Associativity{
 	kRight,
 };
 
-namespace s21{
-	// void CreateTokenMap(std::map<std::string, s21::Token> &token_map);
-	void Validator(std::string input, std::string output);
-
 	class Token {
 		public:
 		Token() = default;
-		// Token(const std::string& name, Priority priority, Associativity associativity, Type type, function_variant function);
+		Token(const std::string& name, Priority priority, Associativity associativity, Type type, function_variant function);
 		~Token() = default;
 
 		void MakeNumber(std::string name, double value);
@@ -54,7 +60,7 @@ namespace s21{
 		Priority priority_;
 		Associativity associativity_;
 		Type type_;
-		// function_variant function_;
+		function_variant function_;
 	};
 
 	class Calculator {

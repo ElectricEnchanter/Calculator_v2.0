@@ -2,7 +2,7 @@
 
 
 int main(){
-  std::string a = "1.2cos(3)";
+  std::string a = "1.23";
   std::string b;
   s21::Validator(a,b);
 
@@ -18,10 +18,8 @@ void s21::Validator(std::string input, std::string output) {
 
   s21::Calculator expression;
   input = expression.ConvertToLower(input);
-  // std::cout << input << std::endl;
   for (size_t index = 0; input.length() > index; ++index){
     expression.ReadToken(input, index);
-    // std::cout << expression.ReadToken(input, index);
   }
 
 }
@@ -32,7 +30,7 @@ std::string s21::Calculator::ReadToken(std::string& input, size_t & index) const
     std::cout << "число"<< std::endl;
     pattern = ("\\d+([.]\\d+)?(e([-+])?\\d+)?");
   } else if (isalpha(input.at(index))){
-      std::cout << "букава"<< std::endl;
+      std::cout << "функция"<< std::endl;
       pattern = "([%cosintaqrtlgx]+)";
   } else {
       std::cout << "знак"<< std::endl;
