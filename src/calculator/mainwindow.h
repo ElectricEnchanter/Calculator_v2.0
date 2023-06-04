@@ -1,9 +1,6 @@
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 
-#include "depcalc.h"
-#include "graph.h"
-#include "loancalc.h"
 #include <math.h>
 #include <stdio.h>
 
@@ -13,6 +10,10 @@
 #include <QMainWindow>
 #include <QResource>
 #include <QVector>
+
+#include "depcalc.h"
+#include "graph.h"
+#include "loancalc.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui {
@@ -33,6 +34,8 @@ class MainWindow : public QMainWindow {
   void on_Credit_clicked();
 
   void on_Deposit_clicked();
+
+  void on_equal_clicked();
 
  private:
   Ui::MainWindow *ui;
