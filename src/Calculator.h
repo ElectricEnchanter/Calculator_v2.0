@@ -27,20 +27,35 @@ namespace s21{
 		std::string ReadToken (std::string& input, size_t &start_index) const;
 		double GetAnswer() const;
 
-		void PushToken(std::string token);
+		double PostfixNotationCalculation(double x_value);
+		double PopFromResult();
+		void PushToResult(double value);
+
+		
+		void PushNumber(std::stack<double>, double value);
+		int PushTokenToQueue(std::string token);
+		void PushToQueue(s21::Token token);
+
+		void PrintToken();
+		void PrintNumber();
+
 		std::string ConvertToLower(std::string);
 
 		private:
 		double answer_{NAN};
 		double x_value_{NAN};
 
-		std::string input;
+		std::string input_;
 		std::string input_x;
 
+		std::vector<double> result_;
+
 		std::map<std::string, Token> token_map_;
-		std::queue<Token> input_;
+		std::stack<Token> stack_token_;
+		std::stack<double> stack_number_;
 
 	};
+		std::queue<Token> input_queue_;
 
 };
 
