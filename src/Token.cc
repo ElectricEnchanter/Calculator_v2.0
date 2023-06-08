@@ -2,7 +2,7 @@
 #include "Calculator.h"
 
 int main(){
-  std::string a = "1.23-22.4";
+  std::string a = "1.23 2-";
   std::string b;
   s21::Validator(a,b);
 
@@ -40,40 +40,44 @@ s21::Token::Token(const std::string& name, Precedence precedence,
 
 
 void s21::Validator(std::string input, std::string input_x) {
+  s21::Calculator expression;
+  s21:Token Number;
+  input = expression.ConvertToLower(input);
+  // input = expression.DeleteSpaces(input);
   std::cmatch result;
   std::regex pattern("[^-/ %.cosintaqrtlgx()^/*+0-9]");
 
   if (std::regex_search(input.c_str(), result, pattern))
     throw std::logic_error("Incorrect symbols");
 
-  s21::Calculator expression;
-  s21:Token Number;
-  input = expression.ConvertToLower(input);
+
   for (size_t index = 0; input.length() > index; ++index){
     std::string a = expression.ReadToken(input, index);
     
     if(!isdigit(a.at(0))){
-      if(expression.PushTokenToQueue(a))
+      if(expression.FindToken(a)){
           std::cout << "запихал знак" << std::endl;
-    }
-    else {
-      Number.PushNumberToQueue(a, stod(a));
-    }
+      }
+    } else {
+      expression.PushNumberToStack(stod(a));
+        }
   }
 
-  std::cout << "Ответ "<< expression.PostfixNotationCalculation(0) << std::endl;
-  // std::cout << expression.GetAnswer() << std::endl;
-  // std::cout << result_.back() << std::endl;
 
-  if(input_queue_.empty())
-    std::cout << "почистился"<< std::endl;
+  // expression.PrintToken();
+  // expression.PrintNumber();
+  double d = expression.PostfixNotationCalculation(0);
+  std::cout << "Ответ "<< d << std::endl;
+  
+  // if(input_queue_.empty())
+  //   std::cout << "почистился"<< std::endl;
 
+}
 
-  //   while(!input_queue_.empty()){
-  //     std::cout << input_queue_.size() << std::endl;
-  //   input_queue_.pop();
-  // }
-
+std::string s21::Calculator::DeleteSpaces(std::string input){
+  input.erase(remove(input.begin(),input.end(),' '),input.end());
+  std::cout << "без пробелов"<< input << std::endl;
+  return input;
 }
 
 std::string s21::Calculator::ReadToken(std::string& input, size_t & index) const{
@@ -86,7 +90,7 @@ std::string s21::Calculator::ReadToken(std::string& input, size_t & index) const
       pattern = "([%cosintaqrtlgx]+)";
   } else {
       // std::cout << "знак ";
-      pattern = "([-()^/*+])";
+      pattern = "([-( )^/*+])";
   }
     std::sregex_iterator regex_iterator = std::sregex_iterator (
     input.begin() + index, input.end(), pattern);
@@ -95,18 +99,28 @@ std::string s21::Calculator::ReadToken(std::string& input, size_t & index) const
     return match.str();
   }
 
-void s21::Calculator::PrintToken(){
-      std::cout << "размер очереди "<< input_queue_.size() << std::endl;
 
-  while(!input_queue_.empty()){
-    // std::cout << input_queue_.front() << std::endl;
-    input_queue_.pop();
+// void s21::Calculator::PrintToken(){
+//         std::cout << "колво операторов "<< stack_operation_.size() << std::endl;
+
+//   while(!stack_operation_.empty()){
+//     std::cout << stack_operation_.top() << std::endl;
+//     stack_operation_.pop();
+//   }
+// }
+
+void s21::Calculator::PrintNumber(){
+      std::cout << "колво цыфор "<< stack_number_.size() << std::endl;
+
+  while(!stack_number_.empty()){
+    std::cout << stack_number_.top() << std::endl;
+    stack_number_.pop();
   }
 }
 
 
-void s21::Calculator::PushToQueue(s21::Token token){
-  input_queue_.push(token);
+void s21::Calculator::PushTokenToQueue(s21::Token token){
+  queue_token_.push(token);
 }
 
 
@@ -114,30 +128,30 @@ double s21::Calculator::PostfixNotationCalculation(double x_value) {
   using namespace s21;
   // input_ = output_;
 
-  while (!input_queue_.empty()) {
+  while (!queue_token_.empty()) {
     // std::cout << "вытащил ебень" << std::endl;
-    // std::cout <<  << std::endl;
+    // std::cout << std::endl;
 
     std::visit(
         overloaded{
-          [&](double function) { PushToResult(function); },
+          [&](double function) { 
+            std::cout << "цыфра" << std::endl;
+            PushToResult(function); },
                    
-                   [&](unary_function function) {
-                     PushToResult(function(PopFromResult()));
-                   },
+          [&](unary_function function) {
+            PushToResult(function(PopFromResult())); },
 
-                   [&](binary_function function) {
-                     double right_argument = PopFromResult();
-                     double left_argument = PopFromResult();
-                     PushToResult(function(left_argument, right_argument));
-                   },
+          [&](binary_function function) {
+            double right_argument = PopFromResult();
+            double left_argument = PopFromResult();
+            PushToResult(function(left_argument, right_argument)); },
 
-                   [&](auto) { PushToResult(x_value); }},
+          [&](auto) { PushToResult(x_value); }},
 
-
-        input_queue_.front().GetFunction());
+         queue_token_.front().GetFunction());
   }
-  return PopFromResult();
+  answer_ = PopFromResult();
+  return answer_;
 }
 
 void s21::Calculator::PushToResult(double value) {
@@ -145,13 +159,14 @@ void s21::Calculator::PushToResult(double value) {
 
   result_.push_back(value);
 
-  input_queue_.pop();
+  queue_token_.pop();
 }
 
 double s21::Calculator::PopFromResult() {
-  double value = result_.back();
-  result_.pop_back();
-  return value;
+
+
+  // queue_token_.pop();
+  return stack_number_.top();
 }
 
 void s21::CreateTokenMap(
@@ -164,7 +179,9 @@ void s21::CreateTokenMap(
     {"+", Token("+", kLow, kLeft, kBinaryOperator, std::plus<double>())},
     {"-", Token("-", kLow, kLeft, kBinaryOperator, std::minus<double>())},
     {"x", Token("x", kDefault, kNone, kNumber, nullptr)},
-
+    {"(", Token("(", kDefault, kNone, kOpenBracket, nullptr)},
+    {")", Token(")", kDefault, kNone, kCloseBracket, nullptr)},
+    {"cos", Token("cos", kFunction, kRight, kUnaryFunction, cosl)},
   };
   token_map.insert(list);
 }
@@ -177,20 +194,31 @@ std::string s21::Calculator::ConvertToLower(std::string input){
 void s21::Token::PushNumberToQueue(std::string name, double value){
   std::cout << name << std::endl;
   Token result(name, kDefault, kNone, kNumber, value);
-  input_queue_.push(result);
+  queue_token_.push(result);
     std::cout<< "запихал число "<<std::endl;
 
 }
 
-int s21::Calculator::PushTokenToQueue(std::string token){
+int s21::Calculator::FindToken(std::string token){
+  if (token == " ") return 0;
   auto found_token = token_map_.find(token);
-  if (found_token == token_map_.end()){
+  if (found_token == token_map_.end() )
     throw std::logic_error("Incorrect symbol: " + token);
-  }
-  input_queue_.push(found_token->second);
+  
+  queue_token_.push(found_token->second);
   return 1;
-
 }
+
+
+// void s21::Calculator::PushTokenToStack(std::string token){
+//   stack_operation_.push(token);
+// }
+void s21::Calculator::PushNumberToStack(double value){
+      std::cout<< "попал число "<<std::endl;
+
+  stack_number_.push(value);
+}
+
 
 
 // void s21::Token::MakeUnaryNegation() {

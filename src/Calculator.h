@@ -33,8 +33,13 @@ namespace s21{
 
 		
 		void PushNumber(std::stack<double>, double value);
-		int PushTokenToQueue(std::string token);
-		void PushToQueue(s21::Token token);
+		int FindToken(std::string token);
+		void PushTokenToQueue(s21::Token token);
+
+		void PushTokenToStack(std::string);
+		void PushNumberToStack(double);
+
+		std::string DeleteSpaces(std::string);
 
 		void PrintToken();
 		void PrintNumber();
@@ -53,9 +58,10 @@ namespace s21{
 		std::map<std::string, Token> token_map_;
 		std::stack<Token> stack_token_;
 		std::stack<double> stack_number_;
+		// std::stack<std::string> stack_operation_;
 
 	};
-		std::queue<Token> input_queue_;
+		std::queue<Token> queue_token_;
 
 };
 
