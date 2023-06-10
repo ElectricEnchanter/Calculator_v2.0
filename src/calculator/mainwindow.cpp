@@ -2,9 +2,6 @@
 
 #include "QDebug"
 #include "ui_mainwindow.h"
-extern "C++" {
-#include "../SmartCalc_v2.0.h"
-}
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent), ui(new Ui::MainWindow) {
@@ -33,8 +30,14 @@ void MainWindow::on_Deposit_clicked() {
 
 void MainWindow::on_equal_clicked() {
   std::string a = ui->input->text().toStdString();
-  std::string b;
-  s21::Validator(a, b);
+  std::string b = ui->XInput->text().toStdString();
+
+  //  s21::Token w;
+  //  s21::Calculator t;
+
+  double num = s21::GetAnswer(a, b);
+  qDebug() << "aaaa " << num;
+  ui->input->setText(QString::number(num));
   //  if (!Validator(a, b))
   //    qDebug() << "нашел херню";
   //  else

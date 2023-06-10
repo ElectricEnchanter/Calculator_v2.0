@@ -1,6 +1,5 @@
 #include "depcalc.h"
 
-#include "../SmartCalc_v2.0.h"
 #include "ui_depcalc.h"
 
 DepCalc::DepCalc(QWidget *parent) : QDialog(parent), ui(new Ui::DepCalc) {
@@ -73,8 +72,8 @@ void DepCalc::on_equalButton_clicked() {
     double depAmount2 = depAmount;
     int payoutCount = 0;
     int y, m, d, y1, m1, d1;
-    // int days = 365;
-    int days = YmdToMord(inputEnd) - YmdToMord(inputStart) - 1;
+    int days = 365;
+    //    int days = s21::YmdToMord(inputEnd) - s21::YmdToMord(inputStart) - 1;
     sscanf(inputStart, "%d.%d.%d", &y, &m, &d);
     sscanf(inputEnd, "%d.%d.%d", &y1, &m1, &d1);
     QVector<QString> labels;

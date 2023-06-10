@@ -9,11 +9,17 @@
 #include <QKeyEvent>
 #include <QMainWindow>
 #include <QResource>
+#include <QVariant>
+#include <QVariantList>
 #include <QVector>
 
 #include "depcalc.h"
 #include "graph.h"
 #include "loancalc.h"
+
+extern "C++" {
+#include "../Token.h"
+}
 
 QT_BEGIN_NAMESPACE
 namespace Ui {
