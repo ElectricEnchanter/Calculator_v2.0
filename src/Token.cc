@@ -10,6 +10,7 @@
 //  std::cout << "ответ " << w.GetAnswer() << std::endl;
 //  return 1;
 //}
+
 namespace s21 {
 
 std::stack<Token> Token::stack_token_;
@@ -67,10 +68,6 @@ void s21::Token::Validator(std::string input, std::string input_x) {
     else
       PushNumberToStack(token, stod(token));
   }
-
-  // double d = expression.PostfixNotationCalculation(0);
-  // std::cout << "Ответ "<< d << std::endl;
-  // expression.SetAnswer(d);
 }
 
 std::string s21::Token::ConvertToLower(std::string input) {
@@ -110,7 +107,18 @@ void s21::Token::CreateTokenMap(std::map<std::string, s21::Token>& token_map) {
       {"x", Token("x", kDefault, kNone, kNumber, nullptr)},
       {"(", Token("(", kDefault, kNone, kOpenBracket, nullptr)},
       {")", Token(")", kDefault, kNone, kCloseBracket, nullptr)},
+      {"/", Token("/", kMedium, kLeft, kBinaryOperator, std::divides<double>())},
+      {"^", Token("^", kHigh, kRight, kBinaryOperator, powl)},
+      {"%", Token("mod", kMedium, kLeft, kBinaryOperator, fmodl)},
       {"cos", Token("cos", kFunction, kRight, kUnaryFunction, cosl)},
+      {"sin", Token("sin", kFunction, kRight, kUnaryFunction, sinl)},
+      {"tan", Token("tan", kFunction, kRight, kUnaryFunction, tanl)},
+      {"acos", Token("acos", kFunction, kRight, kUnaryFunction, acosl)},
+      {"asin", Token("asin", kFunction, kRight, kUnaryFunction, asinl)},
+      {"atan", Token("atan", kFunction, kRight, kUnaryFunction, atanl)},
+      {"sqrt", Token("sqrt", kFunction, kRight, kUnaryFunction, sqrtl)},
+      {"ln", Token("ln", kFunction, kRight, kUnaryFunction, logl)},
+      {"log", Token("log", kFunction, kRight, kUnaryFunction, log10l)},
   };
   token_map.insert(list);
 }

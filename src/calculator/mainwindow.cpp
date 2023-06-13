@@ -6,9 +6,32 @@
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent), ui(new Ui::MainWindow) {
   ui->setupUi(this);
+  ui->groupBox2->hide();
+  ui->groupBox->hide();
+  connect(ui->digit, &QButtonGroup::buttonClicked, this, &MainWindow::digit);
+  connect(ui->digit2, &QButtonGroup::buttonClicked, this, &MainWindow::digit2);
+  ui->XInput->setValidator(new QIntValidator(0, 100000, this));
 }
 
 MainWindow::~MainWindow() { delete ui; }
+
+void MainWindow::digit(QAbstractButton *btm) {
+  if (ui->input->text() == "INVALID CHARACTER(S)" ||
+      ui->input->text() == "nan") {
+    ui->input->setText("");
+  }
+  QString text = btm->text();
+  ui->input->setText(ui->input->text() + text);
+}
+
+void MainWindow::digit2(QAbstractButton *btm) {
+  if (ui->input->text() == "INVALID CHARACTER(S)" ||
+      ui->input->text() == "nan") {
+    ui->input->setText("");
+  }
+  QString text = btm->text();
+  ui->input->setText(ui->input->text() + text + '(');
+}
 
 void MainWindow::on_Graph_clicked() {
   graph.setModal(true);
@@ -29,23 +52,34 @@ void MainWindow::on_Deposit_clicked() {
 }
 
 void MainWindow::on_equal_clicked() {
-  std::string a = ui->input->text().toStdString();
-  std::string b = ui->XInput->text().toStdString();
+  std::string input = ui->input->text().toStdString();
+  std::string input_x = ui->XInput->text().toStdString();
+  s21::Token view;
+  view.CalculateAnswer(input, input_x);
+  ui->input->setText(QString::number(view.GetAnswer()));
+}
 
-  s21::Token w;
-  w.CalculateAnswer(a, b);
-  //     w.GetAnswer();
+void MainWindow::on_addAdededPartsButton_clicked() {
+  if (ui->addAdededPartsButton->isChecked())
+    ui->groupBox2->show();
+  else
+    ui->groupBox2->hide();
+}
 
-  //    std::cout << "ответ " << w.GetAnswer() << std::endl;
+void MainWindow::on_addFuncButton_valueChanged(int value) {
+  if (value == 1)
+    ui->groupBox->show();
+  else
+    ui->groupBox->hide();
+}
 
-  //  s21::Token w;
-  //  s21::Calculator t;
+void MainWindow::keyPressEvent(QKeyEvent *event) {
+  if ((event->key() == Qt::Key_Enter) || (event->key() == Qt::Key_Return)) {
+    on_equal_clicked();
+  }
+}
 
-  //  double num = s21::GetAnswer(a, b);
-  //  qDebug() << "aaaa " << num;
-  ui->input->setText(QString::number(w.GetAnswer()));
-  //  if (!Validator(a, b))
-  //    qDebug() << "нашел херню";
-  //  else
-  //    qDebug() << "вроде норм";
+void MainWindow::on_AC_clicked() {
+  ui->input->setText("");
+  ui->XInput->setText("");
 }

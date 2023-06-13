@@ -96,6 +96,7 @@ class Token {
 
   double answer_{NAN};
   double x_value_{NAN};
+
   static std::stack<Token> stack_token_;
   static std::stack<Token> stack_number_;
 

@@ -35,6 +35,11 @@ class MainWindow : public QMainWindow {
   ~MainWindow();
 
  private slots:
+
+  void digit(QAbstractButton *btm);
+
+  void digit2(QAbstractButton *btm);
+
   void on_Graph_clicked();
 
   void on_Credit_clicked();
@@ -42,6 +47,15 @@ class MainWindow : public QMainWindow {
   void on_Deposit_clicked();
 
   void on_equal_clicked();
+
+  void on_addAdededPartsButton_clicked();
+
+  void on_addFuncButton_valueChanged(int value);
+
+  void on_AC_clicked();
+
+ protected:
+  void keyPressEvent(QKeyEvent *event);
 
  private:
   Ui::MainWindow *ui;
