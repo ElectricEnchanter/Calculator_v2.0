@@ -11,6 +11,9 @@
 //  return 1;
 // }
 
+// унарники и пробелы
+
+
 namespace s21 {
 
 std::stack<Token> Token::stack_token_;
@@ -56,7 +59,6 @@ s21::Token::Token(const std::string& name, Precedence precedence,
 
 void s21::Token::Validator(std::string input, std::string input_x) {
 
-
   std::cmatch result;
   std::regex pattern("[^-/ %.cosintaqrtlgx()^/*+0-9]");
 
@@ -85,16 +87,12 @@ std::string s21::Token::ConvertToLower(std::string input) {
 
 std::string s21::Token::ReadToken(std::string& input, size_t& index) const {
   std::regex pattern;
-  if (isdigit(input.at(index))) {
-    // std::cout << "число ";
+  if (isdigit(input.at(index))) 
     pattern = ("\\d+([.]\\d+)?(e([-+])?\\d+)?");
-  } else if (isalpha(input.at(index))) {
-    // std::cout << "функция ";
+  else if (isalpha(input.at(index))) 
     pattern = "([%cosintaqrtlgx]+)";
-  } else {
-    // std::cout << "знак ";
-    pattern = "([-( )^/*+])";
-  }
+  else pattern = "([-( )^/*+])";
+
   std::sregex_iterator regex_iterator =
       std::sregex_iterator(input.begin() + index, input.end(), pattern);
   std::smatch match = *regex_iterator;
@@ -155,26 +153,25 @@ void s21::Token::PostfixNotationCalculation(double x_value) {
   while (!stack_token_.empty()) {
     std::visit(
         overloaded{[&](double function) {
-                     std::cout << "цыфра" << std::endl;
-                     PushToResult(function);
-                   },
+            std::cout << "цыфра" << std::endl;
+            PushToResult(function);
+          },
 
-                   [&](unary_function function) {
-                      std::cout << "унарка" << std::endl;
+          [&](unary_function function) {
+            std::cout << "унарка" << std::endl;
+            PushToResult(function(PopFromResult()));
+          },
 
-                     PushToResult(function(PopFromResult()));
-                   },
+          [&](binary_function function) {
+          std::cout << "бинарка" << std::endl;
+            double right_argument = PopFromResult();
+            double left_argument = PopFromResult();
+            PushToResult(function(left_argument, right_argument));
+          },
 
-                   [&](binary_function function) {
-                    std::cout << "бинарка" << std::endl;
-                     double right_argument = PopFromResult();
-                     double left_argument = PopFromResult();
-                     PushToResult(function(left_argument, right_argument));
-                   },
-
-                   [&](auto) { 
-                    std::cout << "икс" << std::endl;
-                    PushToResult(x_value); }},
+          [&](auto) { 
+          std::cout << "икс" << std::endl;
+          PushToResult(x_value); }},
 
         stack_token_.top().GetFunction());
   }
@@ -199,7 +196,8 @@ double s21::Token::PopFromResult() {
 
 // void s21::Token::MakeUnaryNegation() {
 //   Token result("negate", kUnaryOperator, kRight, kUnaryPrefixOperator,
-//   std::negate<double>()); *this = result;
+//   std::negate<double>()); 
+//   *this = result;
 // }
 
 }  // namespace s21
