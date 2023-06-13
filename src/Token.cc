@@ -2,14 +2,14 @@
 
 // int main() {
 //   s21::Token w;
-//   std::string a = "1+3.2";
-//   std::string b = "";
+//   std::string a = "x+2";
+//   std::string b = "6";
 //   w.CalculateAnswer(a, b);
 //   w.GetAnswer();
 
 //  std::cout << "ответ " << w.GetAnswer() << std::endl;
 //  return 1;
-//}
+// }
 
 namespace s21 {
 
@@ -35,11 +35,13 @@ void s21::Token::SetAnswer(std::vector<double> result_) {
 }
 
 void s21::Token::CalculateAnswer(std::string input, std::string input_x) {
+  if (input.empty())  throw std::string("EMPTY LINE");
+
 
   CreateTokenMap(token_map_);
   ConvertToLower(input);
   Validator(input, input_x);
-  PostfixNotationCalculation(1);
+  PostfixNotationCalculation(stod(input_x));
   SetAnswer(result_);
 }
 
@@ -53,20 +55,26 @@ s21::Token::Token(const std::string& name, Precedence precedence,
       function_(function){};
 
 void s21::Token::Validator(std::string input, std::string input_x) {
-  input_x = 1;
+
 
   std::cmatch result;
   std::regex pattern("[^-/ %.cosintaqrtlgx()^/*+0-9]");
 
   if (std::regex_search(input.c_str(), result, pattern))
-    throw std::logic_error("Incorrect symbols");
+    throw std::string("INVALID CHARACTER(S)");
+
+  if (std::regex_search(input_x.c_str(), result, pattern))
+    throw std::string("INVALID CHARACTER(S)");
 
   for (size_t index = 0; input.length() > index; ++index) {
     std::string token = ReadToken(input, index);
+    if (token.at(0) == 'x')
+      PushNumberToStack(input_x, std::stod(input_x));
+    else 
     if (!isdigit(token.at(0)))
       TryToPushTokenToStack(token);
     else
-      PushNumberToStack(token, stod(token));
+      PushNumberToStack(token, std::stod(token));
   }
 }
 
@@ -124,16 +132,18 @@ void s21::Token::CreateTokenMap(std::map<std::string, s21::Token>& token_map) {
 }
 
 void s21::Token::PushNumberToStack(std::string name, double value) {
-  std::cout << name << std::endl;
+  std::cout << "num " <<  value  << std::endl;
   Token result(name, kDefault, kNone, kNumber, value);
   stack_number_.push(result);
 }
 
 int s21::Token::TryToPushTokenToStack(std::string token) {
+    std::cout << "token "<< token << std::endl;
+
   if (token == " ") return 0;
   auto found_token = token_map_.find(token);
   if (found_token == token_map_.end())
-    throw std::logic_error("Incorrect symbol: " + token);
+    throw std::string("INVALID CHARACTER(S) " + token);
 
   stack_token_.push(found_token->second);
   return 1;
@@ -150,23 +160,28 @@ void s21::Token::PostfixNotationCalculation(double x_value) {
                    },
 
                    [&](unary_function function) {
+                      std::cout << "унарка" << std::endl;
+
                      PushToResult(function(PopFromResult()));
                    },
 
                    [&](binary_function function) {
+                    std::cout << "бинарка" << std::endl;
                      double right_argument = PopFromResult();
                      double left_argument = PopFromResult();
                      PushToResult(function(left_argument, right_argument));
                    },
 
-                   [&](auto) { PushToResult(x_value); }},
+                   [&](auto) { 
+                    std::cout << "икс" << std::endl;
+                    PushToResult(x_value); }},
 
         stack_token_.top().GetFunction());
   }
 }
 
 void s21::Token::PushToResult(double value) {
-  std::cout << value << std::endl;
+  // std::cout << value << std::endl;
 
   result_.push_back(value);
 

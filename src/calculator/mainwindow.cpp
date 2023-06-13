@@ -17,7 +17,7 @@ MainWindow::~MainWindow() { delete ui; }
 
 void MainWindow::digit(QAbstractButton *btm) {
   if (ui->input->text() == "INVALID CHARACTER(S)" ||
-      ui->input->text() == "nan") {
+      ui->input->text() == "EMPTY LINE") {
     ui->input->setText("");
   }
   QString text = btm->text();
@@ -26,7 +26,7 @@ void MainWindow::digit(QAbstractButton *btm) {
 
 void MainWindow::digit2(QAbstractButton *btm) {
   if (ui->input->text() == "INVALID CHARACTER(S)" ||
-      ui->input->text() == "nan") {
+      ui->input->text() == "EMPTY LINE") {
     ui->input->setText("");
   }
   QString text = btm->text();
@@ -55,8 +55,13 @@ void MainWindow::on_equal_clicked() {
   std::string input = ui->input->text().toStdString();
   std::string input_x = ui->XInput->text().toStdString();
   s21::Token view;
-  view.CalculateAnswer(input, input_x);
-  ui->input->setText(QString::number(view.GetAnswer()));
+
+  try {
+    view.CalculateAnswer(input, input_x);
+    ui->input->setText(QString::number(view.GetAnswer()));
+  } catch (std::string error_message) {
+    ui->input->setText(QString::fromStdString(error_message));
+  }
 }
 
 void MainWindow::on_addAdededPartsButton_clicked() {
