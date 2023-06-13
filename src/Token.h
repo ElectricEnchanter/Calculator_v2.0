@@ -5,16 +5,16 @@
 #include <functional>
 #include <initializer_list>
 #include <iostream>
-#include <vector>
 #include <map>
 #include <queue>
 #include <regex>
 #include <stack>
 #include <variant>
+#include <vector>
 
 namespace s21 {
 
-  enum Precedence {
+enum Precedence {
   kDefault,
   kLow,
   kMedium,
@@ -40,31 +40,32 @@ enum Associativity {
   kRight,
 };
 
+using unary_function = std::function<double(double)>;
+using binary_function = std::function<double(double, double)>;
+using function_variant =
+    std::variant<double, unary_function, binary_function, nullptr_t>;
 
+/// @brief template class for redefining lambda expressions in std::visit
+/// @tparam ...Ts - accepted type of lambda expression
+template <class... Ts>
+struct overloaded : Ts... {
+  using Ts::operator()...;
+};
 
-	using unary_function = std::function<double(double)>;
-	using binary_function = std::function<double(double, double)>;
-	using function_variant = std::variant<double, unary_function, binary_function, nullptr_t>;
-
-	/// @brief template class for redefining lambda expressions in std::visit
-	/// @tparam ...Ts - accepted type of lambda expression
-	template <class... Ts>
-	struct overloaded : Ts... {
-	using Ts::operator()...;
-	};
-
-	/// @brief method of redefining the list of arguments of the overloaded method
-	/// into classes
-	/// @tparam ...Ts - accepted type of lambda expression
-	template <class... Ts>
-	overloaded(Ts...) -> overloaded<Ts...>;
-
+/// @brief method of redefining the list of arguments of the overloaded method
+/// into classes
+/// @tparam ...Ts - accepted type of lambda expression
+template <class... Ts>
+overloaded(Ts...) -> overloaded<Ts...>;
 
 class Token {
  public:
   Token() = default;
   Token(const std::string& name, Precedence precedence,
         Associativity associativity, Type type, function_variant function);
+  Token(const Token&) = default;
+  Token(Token&& token) = delete;
+
   ~Token() = default;
 
   std::string GetName() const;
@@ -72,10 +73,12 @@ class Token {
   Associativity GetAssociativity() const;
   Type GetType() const;
   function_variant GetFunction() const;
+  double GetAnswer();
+  void SetAnswer(std::vector<double>);
+  void CalculateAnswer(std::string input, std::string input_x);
 
   std::string ReadToken(std::string& input, size_t& start_index) const;
   int TryToPushTokenToStack(std::string token);
-
 
   void CreateTokenMap(std::map<std::string, s21::Token>& temp_map);
 
@@ -83,22 +86,20 @@ class Token {
   void MakeUnaryNegation();
 
   void Validator(std::string input, std::string output);
-	std::string ConvertToLower(std::string);
+  std::string ConvertToLower(std::string);
 
-
-  double PostfixNotationCalculation(double x_value);
+  void PostfixNotationCalculation(double x_value);
   double PopFromResult();
   void PushToResult(double value);
 
   std::map<std::string, Token> token_map_;
-  // std::queue<Token> queue_token_;
 
-  std::stack<Token> stack_token_;
-  std::stack<Token> stack_number_;
+  double answer_{NAN};
+  double x_value_{NAN};
+  static std::stack<Token> stack_token_;
+  static std::stack<Token> stack_number_;
 
-    double answer_;
-		double x_value_;
-    vector<double> result_;
+  std::vector<double> result_;
 
  private:
   std::string name_;
@@ -108,13 +109,7 @@ class Token {
   function_variant function_;
 };
 
-
-
-
-
-
 int YmdToMord(char* date);
-
 
 };  // namespace s21
 

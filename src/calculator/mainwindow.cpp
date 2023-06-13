@@ -32,12 +32,18 @@ void MainWindow::on_equal_clicked() {
   std::string a = ui->input->text().toStdString();
   std::string b = ui->XInput->text().toStdString();
 
+  s21::Token w;
+  w.CalculateAnswer(a, b);
+  //     w.GetAnswer();
+
+  //    std::cout << "ответ " << w.GetAnswer() << std::endl;
+
   //  s21::Token w;
   //  s21::Calculator t;
 
-  double num = s21::GetAnswer(a, b);
-  qDebug() << "aaaa " << num;
-  ui->input->setText(QString::number(num));
+  //  double num = s21::GetAnswer(a, b);
+  //  qDebug() << "aaaa " << num;
+  ui->input->setText(QString::number(w.GetAnswer()));
   //  if (!Validator(a, b))
   //    qDebug() << "нашел херню";
   //  else
