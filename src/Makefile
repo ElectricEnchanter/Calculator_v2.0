@@ -1,5 +1,5 @@
 CC=g++
-FLAGS =-Wall -Wextra  -std=c++17
+FLAGS =-Wall -Wextra -Werror  -std=c++17
 FLAGS_GCOV =-fprofile-arcs --coverage
 
 OS=$(shell uname)

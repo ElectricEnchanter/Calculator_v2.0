@@ -11,6 +11,7 @@
 #include <stack>
 #include <variant>
 #include <vector>
+#include <sstream>
 
 namespace s21 {
 
@@ -73,8 +74,9 @@ class Token {
   Associativity GetAssociativity() const;
   Type GetType() const;
   function_variant GetFunction() const;
+  void SetFunction();
   double GetAnswer();
-  void SetAnswer(std::vector<double>);
+  void SetAnswer();
   void CalculateAnswer(std::string input, std::string input_x);
 
   std::string ReadToken(std::string& input, size_t& start_index) const;
@@ -84,21 +86,30 @@ class Token {
 
   void PushNumberToStack(std::string name, double value);
   void MakeUnaryNegation();
-
+  void FindSpacesAndUnaries();
   void Validator(std::string input, std::string output);
-  std::string ConvertToLower(std::string);
+  void ConvertToLower();
 
   void PostfixNotationCalculation(double x_value);
   double PopFromResult();
   void PushToResult(double value);
+  void PushTokenToQueue(std::string input);
+
 
   std::map<std::string, Token> token_map_;
+
+  std::string input_;
+  std::string input_x_;
 
   double answer_{NAN};
   double x_value_{NAN};
 
+  
+
   static std::stack<Token> stack_token_;
   static std::stack<Token> stack_number_;
+
+  std::queue<s21::Token> queue_;
 
   std::vector<double> result_;
 
