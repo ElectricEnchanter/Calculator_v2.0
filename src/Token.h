@@ -65,7 +65,7 @@ class Token {
   Token(const std::string& name, Precedence precedence,
         Associativity associativity, Type type, function_variant function);
   Token(const Token&) = default;
-  Token(Token&& token) = delete;
+  Token(const Token&& ) = delete;
 
   ~Token() = default;
 
@@ -85,7 +85,7 @@ class Token {
   void CreateTokenMap(std::map<std::string, s21::Token>& temp_map);
 
   void PushNumberToStack(std::string name, double value);
-  void MakeUnaryNegation();
+
   void FindSpacesAndUnaries();
   void Validator(std::string input, std::string output);
   void ConvertToLower();
@@ -104,14 +104,14 @@ class Token {
   double answer_{NAN};
   double x_value_{NAN};
 
-  
 
-  static std::stack<Token> stack_token_;
-  static std::stack<Token> stack_number_;
 
-  std::queue<s21::Token> queue_;
 
-  std::vector<double> result_;
+
+static  std::queue<s21::Token> queue_;
+
+static std::queue<s21::Token> queue_token_;
+static std::queue<s21::Token> queue_number_;
 
  private:
   std::string name_;

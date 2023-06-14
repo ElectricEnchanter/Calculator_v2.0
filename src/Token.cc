@@ -1,23 +1,43 @@
 #include "Token.h"
 
-int main() {
-  s21::Token w;
-  std::string a = "-2+2";
-  std::string b = "";
-  w.CalculateAnswer(a, b);
-  w.GetAnswer();
+// int main() {
+//   s21::Token w;
+//   std::string a = "-10+20";
+//   std::string b = "";
+//   w.CalculateAnswer(a, b);
+//   w.GetAnswer();
 
- std::cout << "ответ " << w.GetAnswer() << std::endl;
- return 1; 
-}
+//  std::cout << "ответ " << w.GetAnswer() << std::endl;
+
+//   a = "-10+20";
+//   b = "";
+//   w.CalculateAnswer(a, b);
+//   w.GetAnswer();
+
+//  std::cout << "ответ " << w.GetAnswer() << std::endl;
+//  return 1; 
+// }
 
 // унарники и пробелы
 
 
 namespace s21 {
 
-std::stack<Token> Token::stack_token_;
-std::stack<Token> Token::stack_number_;
+s21::Token::Token(const std::string& name, Precedence precedence,
+                  Associativity associativity, Type type,
+                  function_variant function)
+    : name_(name),
+      precedence_(precedence),
+      associativity_(associativity),
+      type_(type),
+      function_(function){};
+
+
+
+
+std::queue<Token> Token::queue_;
+std::queue<Token> Token::queue_token_;
+std::queue<Token> Token::queue_number_;
 
 std::string s21::Token::GetName() const { return name_; }
 
@@ -34,14 +54,16 @@ s21::function_variant s21::Token::GetFunction() const { return function_; }
 double s21::Token::GetAnswer() { return answer_; }
 
 void s21::Token::SetAnswer() {
-  answer_ = stod(stack_number_.top().GetName());
+  answer_ = stod(queue_number_.front().GetName());
+  queue_number_.pop();
 }
 
 void s21::Token::CalculateAnswer(std::string input, std::string input_x) {
   if (input.empty())  throw std::string("EMPTY LINE");
   double x = 0;
-  input_ = input;
-  input_x_ = input_x;
+  // while(!queue_number_.empty()) queue_number_.pop();
+
+  
 
   CreateTokenMap(token_map_);
   ConvertToLower();
@@ -57,16 +79,6 @@ void s21::Token::CalculateAnswer(std::string input, std::string input_x) {
 }
 
 void s21::Token::FindSpacesAndUnaries(){
-  // std::string buffer;
-  //   for(int i = 0; i != input_.length(); i++){
-  //       if (input_.at(i) != ' '){
-  //         buffer += input_.at(i);
-  //       } else if (input_.at(i) == '+'){
-            
-  //       } else if (input_.at(i) != '-'){
-  //         if (i == 1) MakeUnaryNegation()
-  //     }
-  //   }
     double queue_size = queue_.size();
     // std::cout << queue_.size() << std::endl;
 
@@ -78,8 +90,6 @@ void s21::Token::FindSpacesAndUnaries(){
         buffer = queue_.front().GetName();
         if (isdigit(buffer.at(0)))
           TryToPushTokenToStack("neg");
-        //  queue_.front().SetFunction();
-        // MakeUnaryNegation();
         i++;
       }
     }
@@ -88,13 +98,6 @@ void s21::Token::FindSpacesAndUnaries(){
     // }
     // if (buffer == " "){
       
-    // }
-    // std::cout << std::stod(buffer) << std::endl;
-    // double q = stod(buffer);
-    // std::cout << q << std::endl;
-    // std::cout << isdigit(q) << std::endl;
-
-
    
     if (std::isdigit(buffer.at(0))) {
       PushNumberToStack(buffer, std::stod(buffer));
@@ -113,14 +116,7 @@ void s21::Token::SetFunction(){
   function_ = std::negate<double>(); 
 }
 
-s21::Token::Token(const std::string& name, Precedence precedence,
-                  Associativity associativity, Type type,
-                  function_variant function)
-    : name_(name),
-      precedence_(precedence),
-      associativity_(associativity),
-      type_(type),
-      function_(function){};
+
 
 void s21::Token::Validator(std::string input, std::string input_x) {
 
@@ -139,13 +135,6 @@ void s21::Token::Validator(std::string input, std::string input_x) {
       Token result(token, kDefault, kNone, kNumber, stod(token));
       queue_.push(result);
     } else PushTokenToQueue(token);
-  //   if (token.at(0) == 'x')
-  //     PushNumberToStack(input_x, std::stod(input_x));
-  //   else 
-  //   if (!isdigit(token.at(0)))
-  //     TryToPushTokenToStack(token);
-  //   else
-  //     PushNumberToStack(token, std::stod(token));
   }
 }
 
@@ -202,7 +191,7 @@ void s21::Token::CreateTokenMap(std::map<std::string, s21::Token>& token_map) {
 void s21::Token::PushNumberToStack(std::string name, double value) {
   std::cout << "num " <<  value  << std::endl;
   Token result(name, kDefault, kNone, kNumber, value);
-  stack_number_.push(result);
+  queue_number_.push(result);
 }
 
 int s21::Token::TryToPushTokenToStack(std::string token) {
@@ -213,12 +202,11 @@ int s21::Token::TryToPushTokenToStack(std::string token) {
   if (found_token == token_map_.end())
     throw std::string("INVALID CHARACTER(S) " + token);
 
-  stack_token_.push(found_token->second);
+  queue_token_.push(found_token->second);
   return 1;
 }
 
 void s21::Token::PushTokenToQueue(std::string input){
-  // if (input == " ") return 0;
   auto found_token = token_map_.find(input);
   if (found_token == token_map_.end())
     throw std::string("INVALID CHARACTER(S) " + input);
@@ -230,7 +218,7 @@ void s21::Token::PostfixNotationCalculation(double x_value) {
 
   using namespace s21;
 
-  while (!stack_token_.empty()) {
+  while (!queue_token_.empty()) {
     std::visit(
         overloaded{[&](double function) {
             // std::cout << "цыфра" << std::endl;
@@ -253,8 +241,8 @@ void s21::Token::PostfixNotationCalculation(double x_value) {
           std::cout << "икс" << std::endl;
           PushToResult(x_value); }},
 
-        stack_token_.top().GetFunction());
-        stack_token_.pop();
+        queue_token_.front().GetFunction());
+        queue_token_.pop();
   }
 }
 
@@ -266,16 +254,11 @@ void s21::Token::PushToResult(double value) {
 }
 
 double s21::Token::PopFromResult() {
-  s21::Token s = stack_number_.top();
+  s21::Token s = queue_number_.front();
   std::string a = s.GetName();
-  stack_number_.pop();
+  queue_number_.pop();
   std::cout << "беру       "<< stod(a) << std::endl;
   return stod(a);
-}
-
-void s21::Token::MakeUnaryNegation() {
-  Token result("negate", kUnaryOperator, kRight, kUnaryPrefixOperator, std::negate<double>()); 
-  // *this = result;
 }
 
 }  // namespace s21
