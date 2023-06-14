@@ -1,22 +1,20 @@
 #include "Token.h"
 
-// int main() {
-//   s21::Token w;
-//   std::string a = "-10+20";
-//   std::string b = "";
-//   w.CalculateAnswer(a, b);
-//   w.GetAnswer();
 
-//  std::cout << "ответ " << w.GetAnswer() << std::endl;
+  // std::string a = "-10-30";
+// std::string a = "cos(x";
 
-//   a = "-10+20";
-//   b = "";
-//   w.CalculateAnswer(a, b);
-//   w.GetAnswer();
+int main() {
+  s21::Token w;
+  std::string a = "55*2";
+  std::string b = "";
+  w.CalculateAnswer(a, b);
+  w.GetAnswer();
 
-//  std::cout << "ответ " << w.GetAnswer() << std::endl;
-//  return 1; 
-// }
+ std::cout << "ответ " << w.GetAnswer() << std::endl;
+
+ return 1; 
+}
 
 // унарники и пробелы
 
@@ -61,9 +59,6 @@ void s21::Token::SetAnswer() {
 void s21::Token::CalculateAnswer(std::string input, std::string input_x) {
   if (input.empty())  throw std::string("EMPTY LINE");
   double x = 0;
-  // while(!queue_number_.empty()) queue_number_.pop();
-
-  
 
   CreateTokenMap(token_map_);
   ConvertToLower();
@@ -74,7 +69,6 @@ void s21::Token::CalculateAnswer(std::string input, std::string input_x) {
   else x = stod(input_x);
   PostfixNotationCalculation(x);
   SetAnswer();
- 
  
 }
 
@@ -93,9 +87,9 @@ void s21::Token::FindSpacesAndUnaries(){
         i++;
       }
     }
-    // if (buffer == "+"){
-      
-    // }
+    if (buffer == "+" && i == 0) {
+        // i++;
+    }
     // if (buffer == " "){
       
    
@@ -103,7 +97,7 @@ void s21::Token::FindSpacesAndUnaries(){
       PushNumberToStack(buffer, std::stod(buffer));
     } else if (buffer == "x") {
       PushNumberToStack(input_x_, std::stod(input_x_));
-    } else {
+    } else if (i != 0){
       TryToPushTokenToStack(buffer);
     }
     queue_.pop();
@@ -125,6 +119,10 @@ void s21::Token::Validator(std::string input, std::string input_x) {
 
   if (std::regex_search(input.c_str(), result, pattern))
     throw std::string("INVALID CHARACTER(S)");
+
+   pattern = "^[^0-9]";
+  if (std::regex_search(input.c_str(), result, pattern) && !isdigit(stod(input_x)))
+  throw std::string("INVALID CHARACTER(S)");
 
   if (std::regex_search(input_x.c_str(), result, pattern))
     throw std::string("INVALID CHARACTER(S)");
@@ -231,10 +229,11 @@ void s21::Token::PostfixNotationCalculation(double x_value) {
           },
 
           [&](binary_function function) {
-          // std::cout << "бинарка" << std::endl;
+          std::cout << "бинарка" << std::endl;
+
             double right_argument = PopFromResult();
             double left_argument = PopFromResult();
-            PushToResult(function(left_argument, right_argument));
+            PushToResult(function(right_argument, left_argument));
           },
 
           [&](auto) {
@@ -254,11 +253,16 @@ void s21::Token::PushToResult(double value) {
 }
 
 double s21::Token::PopFromResult() {
+  if(queue_number_.empty())
+   throw std::string("NOT ENOUGH NUMBERS");
+  else {
   s21::Token s = queue_number_.front();
   std::string a = s.GetName();
-  queue_number_.pop();
   std::cout << "беру       "<< stod(a) << std::endl;
+  queue_number_.pop();
   return stod(a);
+  }
+
 }
 
 }  // namespace s21
