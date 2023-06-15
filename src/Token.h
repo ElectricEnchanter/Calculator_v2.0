@@ -95,7 +95,6 @@ class Token {
   void Validator(std::string input, std::string output);
   void ConvertToLower();
 
-  void PostfixNotationCalculation(double x_value);
   double PopFromResult();
   void PushToResult(double value);
   void PushTokenToQueue(std::string input);

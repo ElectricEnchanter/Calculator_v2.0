@@ -18,13 +18,13 @@ s21::Token w;
   EXPECT_EQ(w.GetAnswer(), -8);
 }
 
-// TEST(EqualRes, test3){
-// s21::Token w;
-//   std::string a = "-2+3";
-//   std::string b = "";
-//   w.CalculateAnswer(a, b);
-//   EXPECT_EQ(w.GetAnswer(), 1);
-// }
+TEST(EqualRes, test3){
+s21::Token w;
+  std::string a = "-2+3";
+  std::string b = "";
+  w.CalculateAnswer(a, b);
+  EXPECT_EQ(w.GetAnswer(), 1);
+}
 
 // TEST(EqualRes, test4){
 // s21::Token w;
@@ -73,6 +73,22 @@ TEST(EqualRes, test9){
 	std::string b = "5";
 	w.CalculateAnswer(a, b);
 	EXPECT_EQ(w.GetAnswer(), -0.71634);
+}
+
+TEST(EqualRes, test10){
+	s21::Token w;
+	std::string a = "cos(x)";
+	std::string b = "5";
+	w.CalculateAnswer(a, b);
+	EXPECT_EQ(w.GetAnswer(), 0.283662);
+}
+
+TEST(EqualRes, test11){
+	s21::Token w;
+  std::string a = "-2+x";
+  std::string b = "5";
+	w.CalculateAnswer(a, b);
+	EXPECT_EQ(w.GetAnswer(), 3);
 }
 
 
