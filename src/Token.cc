@@ -6,8 +6,9 @@
 
 // int main() {
 //   s21::Token w;
-//   std::string a = "cos(2+3)+4-5";
-//   std::string b = "";
+//   std::string a = "cos(2+3)+4-x";
+//   // std::string a = "x+2";
+//   std::string b = "5";
 //   w.CalculateAnswer(a, b);
 //   w.GetAnswer();
 
@@ -62,16 +63,12 @@ void s21::Token::SetAnswer() {
 
 void s21::Token::CalculateAnswer(std::string input, std::string input_x) {
   if (input.empty())  throw std::string("EMPTY LINE");
-  // double x = 0;
 
   CreateTokenMap(token_map_);
   ConvertToLower();
   Validator(input, input_x);
   FindSpacesAndUnaries();
  
-  // if(input_x.empty()) x = 0;
-  // else x = stod(input_x);
-  // PostfixNotationCalculation(x);
   SetAnswer();
  
 }
@@ -83,6 +80,7 @@ void s21::Token::FindSpacesAndUnaries(){
     std::string token = queue_.front().GetName();
     if (token == " ")
     queue_.pop();
+    // continue;
     if (token == "-"){
 
     }
@@ -90,20 +88,24 @@ void s21::Token::FindSpacesAndUnaries(){
     if(token == ")") {
       while(queue_token_.top().GetName() != "("){
         Counting();
-        // queue_token_.pop();
       }
       queue_token_.pop();
     }
-
+    if (token == "x"){
+      std::ostringstream ost;
+      ost << x_value_;
+       Token result(ost.str(), kDefault, kNone, kNumber, x_value_);
+      queue_number_.push(result);
+    }
     if (isdigit(token.at(0))){
       queue_number_.push(queue_.front());
-    }else if(queue_token_.empty()){
+    }else if(queue_token_.empty() && token != "x"){
        queue_token_.push(queue_.front());
     }
     else if(token == "("){
       queue_token_.push(queue_.front());
     } 
-    else if (token != ")")
+    else if (token != ")" && token != "x" )
       Conditions();
 
     

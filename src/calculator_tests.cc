@@ -67,6 +67,14 @@ TEST(EqualRes, test8){
 	EXPECT_EQ(w.GetAnswer(), -0.71634);
 }
 
+TEST(EqualRes, test9){
+	s21::Token w;
+	std::string a = "cos(2+3)+4-x";
+	std::string b = "5";
+	w.CalculateAnswer(a, b);
+	EXPECT_EQ(w.GetAnswer(), -0.71634);
+}
+
 
 
 int main(int argc, char **argv) {
