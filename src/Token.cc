@@ -4,17 +4,17 @@
   // std::string a = "-10-30";
 // std::string a = "cos(x";
 
-int main() {
-  s21::Token w;
-  std::string a = "55*2";
-  std::string b = "";
-  w.CalculateAnswer(a, b);
-  w.GetAnswer();
+// int main() {
+//   s21::Token w;
+//   std::string a = "cos(2+3)+4-5";
+//   std::string b = "";
+//   w.CalculateAnswer(a, b);
+//   w.GetAnswer();
 
- std::cout << "ответ " << w.GetAnswer() << std::endl;
+//  std::cout << "ответ " << w.GetAnswer() << std::endl;
 
- return 1; 
-}
+//  return 1; 
+// }
 
 // унарники и пробелы
 
@@ -31,11 +31,13 @@ s21::Token::Token(const std::string& name, Precedence precedence,
       function_(function){};
 
 
-
-
 std::queue<Token> Token::queue_;
-std::queue<Token> Token::queue_token_;
-std::queue<Token> Token::queue_number_;
+std::stack<s21::Token> Token::queue_token_;
+std::stack<s21::Token> Token::queue_number_;
+
+
+// std::queue<Token> Token::queue_token_;
+// std::queue<Token> Token::queue_number_;
 
 std::string s21::Token::GetName() const { return name_; }
 
@@ -52,56 +54,133 @@ s21::function_variant s21::Token::GetFunction() const { return function_; }
 double s21::Token::GetAnswer() { return answer_; }
 
 void s21::Token::SetAnswer() {
-  answer_ = stod(queue_number_.front().GetName());
+
+  std::cout << queue_number_.top().GetName() <<std::endl;
+  answer_ = stod(queue_number_.top().GetName());
   queue_number_.pop();
 }
 
 void s21::Token::CalculateAnswer(std::string input, std::string input_x) {
   if (input.empty())  throw std::string("EMPTY LINE");
-  double x = 0;
+  // double x = 0;
 
   CreateTokenMap(token_map_);
   ConvertToLower();
   Validator(input, input_x);
   FindSpacesAndUnaries();
  
-  if(input_x.empty()) x = 0;
-  else x = stod(input_x);
-  PostfixNotationCalculation(x);
+  // if(input_x.empty()) x = 0;
+  // else x = stod(input_x);
+  // PostfixNotationCalculation(x);
   SetAnswer();
  
 }
 
 void s21::Token::FindSpacesAndUnaries(){
-    double queue_size = queue_.size();
-    // std::cout << queue_.size() << std::endl;
 
-  for(size_t i = 0; i < queue_size; ++i){
-    std::string buffer = queue_.front().GetName();
-    if (buffer == "-"){
-      if (i == 0) {
-        queue_.pop();
-        buffer = queue_.front().GetName();
-        if (isdigit(buffer.at(0)))
-          TryToPushTokenToStack("neg");
-        i++;
+  while (!queue_.empty()){
+
+    std::string token = queue_.front().GetName();
+    if (token == " ")
+    queue_.pop();
+    if (token == "-"){
+
+    }
+
+    if(token == ")") {
+      while(queue_token_.top().GetName() != "("){
+        Counting();
+        // queue_token_.pop();
       }
+      queue_token_.pop();
     }
-    if (buffer == "+" && i == 0) {
-        // i++;
+
+    if (isdigit(token.at(0))){
+      queue_number_.push(queue_.front());
+    }else if(queue_token_.empty()){
+       queue_token_.push(queue_.front());
     }
-    // if (buffer == " "){
+    else if(token == "("){
+      queue_token_.push(queue_.front());
+    } 
+    else if (token != ")")
+      Conditions();
+
+    
+    queue_.pop();
+  }
+
+//   while (!queue_number_.empty()){
+//   std::string token = queue_number_.top().GetName();
+//     std::cout <<  token << std::endl;
+//     queue_number_.pop();
+//   }
+//  std::cout <<  " sssssssssssssssssss" << std::endl;
+//   while (!queue_token_.empty()){
+//   std::string token = queue_token_.top().GetName();
+//     std::cout <<  token << std::endl;
+//     queue_token_.pop();
+//   }
+  
+
+  while(!queue_token_.empty()){
+    Counting();
+  }
+
+
+  
+
+
+
+
+
+
+
+
+  //   double queue_size = queue_.size();
+  //   // std::cout << queue_.size() << std::endl;
+
+  // for(size_t i = 0; i < queue_size; ++i){
+  //   std::string buffer = queue_.front().GetName();
+  //   if (buffer == "-"){
+  //     if (i == 0) {
+  //       queue_.pop();
+  //       buffer = queue_.front().GetName();
+  //       if (isdigit(buffer.at(0)))
+  //         TryToPushTokenToStack("neg");
+  //       i++;
+  //     }
+  //   }
+  //   if (buffer == "+" && i == 0) {
+  //       // i++;
+  //   }
+  //   // if (buffer == " "){
       
    
-    if (std::isdigit(buffer.at(0))) {
-      PushNumberToStack(buffer, std::stod(buffer));
-    } else if (buffer == "x") {
-      PushNumberToStack(input_x_, std::stod(input_x_));
-    } else if (i != 0){
-      TryToPushTokenToStack(buffer);
-    }
-    queue_.pop();
-  }      
+  //   if (std::isdigit(buffer.at(0))) {
+  //     PushNumberToStack(buffer, std::stod(buffer));
+  //   } else if (buffer == "x") {
+  //     PushNumberToStack(input_x_, std::stod(input_x_));
+  //   } else {
+  //     TryToPushTokenToStack(buffer);
+  //   }
+  //   queue_.pop();
+  // }
+}
+
+void s21::Token::Conditions(){
+  std::cout << "Условия" << std::endl;
+  std::cout <<queue_token_.top().GetName() <<queue_token_.top().GetPrecedence() << std::endl;
+  std::cout <<queue_.front().GetName() <<queue_.front().GetPrecedence() << std::endl;
+
+
+  if(queue_token_.top().GetPrecedence() > queue_.front().GetPrecedence() || queue_token_.top().GetPrecedence() == queue_.front().GetPrecedence() ){
+    
+    Counting();
+    queue_token_.push(queue_.front());
+  }else {
+    queue_token_.push(queue_.front());
+  }
 }
 
 void s21::Token::SetFunction(){
@@ -113,6 +192,8 @@ void s21::Token::SetFunction(){
 
 
 void s21::Token::Validator(std::string input, std::string input_x) {
+  if(!input_x.empty())
+  x_value_ = stod(input_x);
 
   std::cmatch result;
   std::regex pattern("[^-/ %.cosintaqrtlgx()^/*+0-9]");
@@ -120,9 +201,9 @@ void s21::Token::Validator(std::string input, std::string input_x) {
   if (std::regex_search(input.c_str(), result, pattern))
     throw std::string("INVALID CHARACTER(S)");
 
-   pattern = "^[^0-9]";
-  if (std::regex_search(input.c_str(), result, pattern) && !isdigit(stod(input_x)))
-  throw std::string("INVALID CHARACTER(S)");
+  //  pattern = "^[^0-9]";
+  // if (std::regex_search(input.c_str(), result, pattern) && !isdigit(stod(input_x)))
+  // throw std::string("INVALID CHARACTER(S)");
 
   if (std::regex_search(input_x.c_str(), result, pattern))
     throw std::string("INVALID CHARACTER(S)");
@@ -186,14 +267,109 @@ void s21::Token::CreateTokenMap(std::map<std::string, s21::Token>& token_map) {
   token_map.insert(list);
 }
 
+void s21::Token::Counting() {
+
+  using namespace s21;
+
+   
+
+        std::cout<< "now token   "<<queue_token_.top().GetName() << std::endl;
+    std::visit(
+        overloaded{
+          [&](double function) {
+            std::cout << "цыфра" << std::endl;
+            PushToResult(function);
+          },
+
+          [&](unary_function function) {
+            PushToResult(function(PopFromResult()));
+          },
+
+          [&](binary_function function) {
+            double right_argument = PopFromResult();
+            double left_argument = PopFromResult();
+            PushToResult(function(left_argument, right_argument));
+          },
+
+          [&](auto) {
+          std::cout << "скобка" << std::endl;
+          std::string bracet = queue_token_.top().GetName();
+          if (bracet != "(" && bracet != ")") PushToResult(x_value_); 
+          else if (bracet == ")") {
+            while (queue_token_.top().GetName() != "("){
+              
+              queue_token_.pop();
+              queue_token_.top().GetFunction();
+              PostfixNotationCalculation(x_value_);
+            }
+          }}},
+
+        queue_token_.top().GetFunction()
+        );
+         queue_token_.pop();
+
+}
+
+
+void s21::Token::PostfixNotationCalculation(double x_value) {
+
+  using namespace s21;
+
+  while (!queue_token_.empty()) {
+        std::cout<< "now token   "<<queue_token_.top().GetName() << std::endl;
+    std::visit(
+        overloaded{
+          // [&](kNumber function){
+          // std::cout << "цыфра" << std::endl;
+          //   PushToResult(kNumber);
+
+          // },
+          [&](double function) {
+            std::cout << "цыфра" << std::endl;
+            PushToResult(function);
+          },
+
+          [&](unary_function function) {
+            PushToResult(function(PopFromResult()));
+          },
+
+          [&](binary_function function) {
+            double right_argument = PopFromResult();
+            double left_argument = PopFromResult();
+            PushToResult(function(right_argument, left_argument));
+          },
+
+          [&](auto) {
+          std::cout << "скобка" << std::endl;
+          std::string bracet = queue_token_.top().GetName();
+          if (bracet != "(" && bracet != ")") PushToResult(x_value); 
+          else if (bracet == ")") {
+            while (queue_token_.top().GetName() != "("){
+              
+              queue_token_.pop();
+              queue_token_.top().GetFunction();
+              PostfixNotationCalculation(x_value);
+            }
+          }}},
+
+        queue_token_.top().GetFunction()
+        );
+      // std::cout<< queue_token_.top().GetName() << std::endl;
+
+        queue_token_.pop();
+  }
+
+
+}
+
 void s21::Token::PushNumberToStack(std::string name, double value) {
-  std::cout << "num " <<  value  << std::endl;
+  std::cout << "пушу " <<  value  << std::endl;
   Token result(name, kDefault, kNone, kNumber, value);
   queue_number_.push(result);
 }
 
 int s21::Token::TryToPushTokenToStack(std::string token) {
-    std::cout << "token "<< token << std::endl;
+    // std::cout << "token "<< token << std::endl;
 
   if (token == " ") return 0;
   auto found_token = token_map_.find(token);
@@ -212,38 +388,7 @@ void s21::Token::PushTokenToQueue(std::string input){
   queue_.push(found_token->second);
 }
 
-void s21::Token::PostfixNotationCalculation(double x_value) {
 
-  using namespace s21;
-
-  while (!queue_token_.empty()) {
-    std::visit(
-        overloaded{[&](double function) {
-            // std::cout << "цыфра" << std::endl;
-            PushToResult(function);
-          },
-
-          [&](unary_function function) {
-            // std::cout << "унарка" << std::endl;
-            PushToResult(function(PopFromResult()));
-          },
-
-          [&](binary_function function) {
-          std::cout << "бинарка" << std::endl;
-
-            double right_argument = PopFromResult();
-            double left_argument = PopFromResult();
-            PushToResult(function(right_argument, left_argument));
-          },
-
-          [&](auto) {
-          std::cout << "икс" << std::endl;
-          PushToResult(x_value); }},
-
-        queue_token_.front().GetFunction());
-        queue_token_.pop();
-  }
-}
 
 void s21::Token::PushToResult(double value) {
   std::ostringstream token;
@@ -256,7 +401,7 @@ double s21::Token::PopFromResult() {
   if(queue_number_.empty())
    throw std::string("NOT ENOUGH NUMBERS");
   else {
-  s21::Token s = queue_number_.front();
+  s21::Token s = queue_number_.top();
   std::string a = s.GetName();
   std::cout << "беру       "<< stod(a) << std::endl;
   queue_number_.pop();

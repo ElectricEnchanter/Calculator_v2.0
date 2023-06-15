@@ -69,6 +69,8 @@ class Token {
 
   ~Token() = default;
 
+  void Counting(double x_value);
+
   std::string GetName() const;
   Precedence GetPrecedence() const;
   Associativity GetAssociativity() const;
@@ -78,6 +80,8 @@ class Token {
   double GetAnswer();
   void SetAnswer();
   void CalculateAnswer(std::string input, std::string input_x);
+  void Conditions();
+  void Counting();
 
   std::string ReadToken(std::string& input, size_t& start_index) const;
   int TryToPushTokenToStack(std::string token);
@@ -110,8 +114,8 @@ class Token {
 
 static  std::queue<s21::Token> queue_;
 
-static std::queue<s21::Token> queue_token_;
-static std::queue<s21::Token> queue_number_;
+static std::stack<s21::Token> queue_token_;
+static std::stack<s21::Token> queue_number_;
 
  private:
   std::string name_;
