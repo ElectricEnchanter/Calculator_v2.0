@@ -3,6 +3,10 @@
 
 #include <QDialog>
 
+extern "C++" {
+#include "../Token.h"
+}
+
 namespace Ui {
 class Graph;
 }
@@ -19,8 +23,13 @@ class Graph : public QDialog {
 
   void on_erase_clicked();
 
+  void on_buildButton_clicked();
+
  private:
   Ui::Graph *ui;
+  double xBegin, xEnd, h, X;
+  int N;
+  QVector<double> x, y;
 };
 
 #endif  // GRAPH_H
