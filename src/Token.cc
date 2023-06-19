@@ -6,7 +6,8 @@
 
 // int main() {
 //   s21::Token w;
-//   std::string a = "-10-30";
+//   // std::string a = "+5+(-3)";
+//   std::string a = "8+9";
 //   std::string b = "";
 //   w.CalculateAnswer(a, b);
 //   w.GetAnswer();
@@ -74,13 +75,14 @@ void s21::Token::CalculateAnswer(std::string input, std::string input_x) {
 
 void s21::Token::FindSpacesAndUnaries(){
   int size = queue_.size();
+  int flag = 0;
   
-  for (int i = 0; i < size; ++i){
+  for (int i = 0; i < size; ++i, queue_.pop()){
     std::string token = queue_.front().GetName();
 
-
-
     if(token == ")") {
+      flag--;
+      std::cout << queue_token_.top().GetName()<< std::endl;
       while(queue_token_.top().GetName() != "("){
         Counting();
       }
@@ -89,27 +91,46 @@ void s21::Token::FindSpacesAndUnaries(){
     if (token == "x"){
       std::ostringstream ost;
       ost << x_value_;
-       Token result(ost.str(), kDefault, kNone, kNumber, x_value_);
+      Token result(ost.str(), kDefault, kNone, kNumber, x_value_);
       queue_number_.push(result);
     }
     if (isdigit(token.at(0))){
       queue_number_.push(queue_.front());
-    }else if (token == "-" && i == 0){
-      Token a("-", kLow, kRight, kUnaryPrefixOperator, std::negate<double>());
-      queue_token_.push(a);
-    }else if (token == "+" && i == 0){
-      continue;
+    }else if (i == 0 && (token == "+" || token == "-")){
+        if (token == "+") continue;
+        if (token == "-") {
+          Token a("-", kLow, kRight, kUnaryPrefixOperator, std::negate<double>());
+          queue_token_.push(a);
+        }
     }else if(queue_token_.empty() && token != "x"){
        queue_token_.push(queue_.front());
     }
     else if(token == "("){
+      i++;
+      flag++;
       queue_token_.push(queue_.front());
+      queue_.pop();
+      token = queue_.front().GetName();
+      if (isdigit(token.at(0))) queue_number_.push(queue_.front());
+      else if (token == "+") continue;
+      else if (token == "-"){
+        Token a("-", kLow, kRight, kUnaryPrefixOperator, std::negate<double>());
+        queue_token_.push(a);
+      }
+      else if (token == "x") {
+        std::ostringstream ost;
+      ost << x_value_;
+      Token result(ost.str(), kDefault, kNone, kNumber, x_value_);
+      queue_number_.push(result);
+      }
+      else queue_token_.push(queue_.front());
+
     } 
     else if (token != ")" && token != "x" )
       Conditions();
 
     
-    queue_.pop();
+    
   }
 
 //   while (!queue_number_.empty()){
@@ -163,19 +184,21 @@ void s21::Token::Validator(std::string input, std::string input_x) {
   if (std::regex_search(input.c_str(), result, pattern))
     throw std::string("INVALID CHARACTER(S)");
 
-  //  pattern = "^[^0-9]";
-  // if (std::regex_search(input.c_str(), result, pattern) && !isdigit(stod(input_x)))
-  // throw std::string("INVALID CHARACTER(S)");
+   pattern = ".*[\\dx].*";
+  if (!std::regex_search(input.c_str(), result, pattern) )
+  throw std::string("NO NUMBERS OR X VARIABLE");
 
-  if (std::regex_search(input_x.c_str(), result, pattern))
-    throw std::string("INVALID CHARACTER(S)");
+  // pattern = "[^]"
+  // if (std::regex_search(input.c_str(), result, pattern) )
+  // throw std::string("INVALID CHARACTER(S)");
 
   for (size_t index = 0; input.length() > index; ++index) {
     std::string token = ReadToken(input, index);
     if (isdigit(token.at(0))){
       Token result(token, kDefault, kNone, kNumber, stod(token));
       queue_.push(result);
-    } else PushTokenToQueue(token);
+    } else if (token == " ") continue;
+      else PushTokenToQueue(token);
   }
 }
 
@@ -208,6 +231,7 @@ void s21::Token::CreateTokenMap(std::map<std::string, s21::Token>& token_map) {
       {"-", Token("-", kLow, kLeft, kBinaryOperator, std::minus<double>())},
       {"*",
        Token("*", kMedium, kLeft, kBinaryOperator, std::multiplies<double>())},
+      {" ", Token(" ", kDefault, kNone, kNumber, nullptr)},
       {"x", Token("x", kDefault, kNone, kNumber, nullptr)},
       {"(", Token("(", kDefault, kNone, kOpenBracket, nullptr)},
       {")", Token(")", kDefault, kNone, kCloseBracket, nullptr)},

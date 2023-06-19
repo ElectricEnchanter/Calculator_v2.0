@@ -130,3 +130,18 @@ int YmdToMord(char* date);
 };  // namespace s21
 
 #endif  // TOKEN_H_
+
+
+    // }else if (token == "-"){
+    //   if (i == 0 || (!queue_token_.empty() && queue_token_.top().GetName() == "(")){
+    //     Token a("-", kHigh, kRight, kUnaryPrefixOperator, std::negate<double>());
+    //     queue_token_.push(a);
+    //   } 
+    //   else queue_token_.push(queue_.front());
+    // }else if (token == "+"){
+    //   if (i == 0) continue;
+    //   if (!queue_token_.empty() && queue_token_.top().GetName() == "(") continue;
+    //   else queue_token_.push(queue_.front());
+
+      //     if (i == 0 || (!queue_token_.empty() && queue_token_.top().GetName() == "(")) continue;
+      // else queue_token_.push(queue_.front());
