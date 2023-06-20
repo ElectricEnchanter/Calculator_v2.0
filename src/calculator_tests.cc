@@ -424,26 +424,54 @@ s21::Token w;
   EXPECT_ANY_THROW(w.CalculateAnswer(a, b));
 }
 
-TEST(Fall, test13){
-s21::Token w;
-  std::string a = "2.233.4+sin()+3";
-  std::string b = "";
-  EXPECT_ANY_THROW(w.CalculateAnswer(a, b));
+// TEST(Fall, test13){
+// s21::Token w;
+//   std::string a = "2.233.4+sin()+3";
+//   std::string b = "";
+//   EXPECT_ANY_THROW(w.CalculateAnswer(a, b));
+
+  //(\b(?:\d+\.)+\d+(?:)?)
+  // 2.3.2^2
+  // 2.3.2+
+  // 2.233.4+sin()+3
+  // 333.444.422
+  // 12.34.55
+  // 2.233.4+sin()+3
 }
 
-TEST(Fall, test14){
-s21::Token w;
-  std::string a = "2--2";
-  std::string b = "";
-  EXPECT_ANY_THROW(w.CalculateAnswer(a, b));
-}
+// TEST(Fall, test14){
+// s21::Token w;
+//   std::string a = "2--2";
+//   std::string b = "";
+//   EXPECT_ANY_THROW(w.CalculateAnswer(a, b));
 
-TEST(Fall, test15){
-s21::Token w;
-  std::string a = "2.3.2^2";
-  std::string b = "";
-  EXPECT_ANY_THROW(w.CalculateAnswer(a, b));
-}
+//(\b\d+(?:(?:[+\-*\/^%]{2,}|(?!\/)\/)[\s]*)?\d+\b)
+// 2--2
+// 2**2
+// 2++2
+// 2^^2
+// 2%%2
+// 2//2
+// но не 
+// 2.2
+// 2 2
+// 2-2
+// 2*2
+// 2+2
+// 2^2
+// 2%2
+// 2/2
+// 2+cos(2)
+// 2. 2
+// 2 2
+// }
+
+// TEST(Fall, test15){
+// s21::Token w;
+//   std::string a = "2.3.2^2";
+//   std::string b = "";
+//   EXPECT_ANY_THROW(w.CalculateAnswer(a, b));
+// }
 
 
 

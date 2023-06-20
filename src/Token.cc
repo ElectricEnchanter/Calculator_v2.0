@@ -1,13 +1,8 @@
 #include "Token.h"
 
-
-  // std::string a = "-10-30";
-// std::string a = "cos(x";
-
 // int main() {
 //   s21::Token w;
-//   // std::string a = "+5+(-3)";
-//   std::string a = "9%2";
+//   std::string a = "2.233.4";
 //   std::string b = "";
 //   w.CalculateAnswer(a, b);
 //   w.GetAnswer();
@@ -37,9 +32,6 @@ std::stack<s21::Token> Token::queue_token_;
 std::stack<s21::Token> Token::queue_number_;
 
 
-// std::queue<Token> Token::queue_token_;
-// std::queue<Token> Token::queue_number_;
-
 std::string s21::Token::GetName() const { return name_; }
 
 s21::Precedence s21::Token::GetPrecedence() const { return precedence_; }
@@ -68,7 +60,7 @@ void s21::Token::CalculateAnswer(std::string input, std::string input_x) {
   ConvertToLower();
   Validator(input, input_x);
   FindSpacesAndUnaries();
- 
+
   SetAnswer();
  
 }
@@ -133,19 +125,6 @@ void s21::Token::FindSpacesAndUnaries(){
     
   }
 
-//   while (!queue_number_.empty()){
-//   std::string token = queue_number_.top().GetName();
-//     std::cout <<  token << std::endl;
-//     queue_number_.pop();
-//   }
-//  std::cout <<  " sssssssssssssssssss" << std::endl;
-//   while (!queue_token_.empty()){
-//   std::string token = queue_token_.top().GetName();
-//     std::cout <<  token << std::endl;
-//     queue_token_.pop();
-//   }
-  
-
   while(!queue_token_.empty()){
     Counting();
   }
@@ -177,22 +156,30 @@ void s21::Token::Validator(std::string input, std::string input_x) {
   std::regex pattern("[^-/ %.cosintaqrtlgx()^/*+0-9]");
 
   if (std::regex_search(input.c_str(), result, pattern))
-    throw std::string("INVALID CHARACTER(S)");
+  throw std::string("INVALID CHARACTER(S)");
 
-   pattern = ".*[\\dx].*";
+  pattern = ".*[\\dx].*";
   if (!std::regex_search(input.c_str(), result, pattern) )
   throw std::string("NO NUMBERS OR X VARIABLE");
 
-  // pattern = "[^]"
-  // if (std::regex_search(input.c_str(), result, pattern) )
-  // throw std::string("INVALID CHARACTER(S)");
+  pattern = ".*\\. \\d.*";
+  if (std::regex_search(input.c_str(), result, pattern) )
+  throw std::string("INVALID CHARACTER(S)");
+
+  // pattern = "(\\b\\d+(?:(?:[+\\-*/^%]{2,}|(?!\\/)\\/)[\\s]*)?\\d+\\b)";
+  pattern = "(\b(?:\\d+\\.)+\\d+(?:)?)";
+  if (std::regex_search(input.c_str(), result, pattern) )
+  throw std::string("INVALID CHARACTER(S)");
+
 
   for (size_t index = 0; input.length() > index; ++index) {
     std::string token = ReadToken(input, index);
     if (isdigit(token.at(0))){
       Token result(token, kDefault, kNone, kNumber, stod(token));
       queue_.push(result);
-    } else if (token == " ") continue;
+      }
+        else if (token == " ") continue;
+      
       else PushTokenToQueue(token);
   }
 }

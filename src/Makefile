@@ -12,7 +12,7 @@ else
 endif
 
 
-all: clean pognal
+all: pognal
 
 pognal:
 	$(CC) $(FLAGS) -g Token.cc && ./a.out
