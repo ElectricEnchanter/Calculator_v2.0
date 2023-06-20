@@ -7,7 +7,7 @@
 // int main() {
 //   s21::Token w;
 //   // std::string a = "+5+(-3)";
-//   std::string a = "8+9";
+//   std::string a = "9%2";
 //   std::string b = "";
 //   w.CalculateAnswer(a, b);
 //   w.GetAnswer();
@@ -166,11 +166,6 @@ void s21::Token::Conditions(){
   }
 }
 
-void s21::Token::SetFunction(){
-  std::string name = name_;
-  if(isdigit(name.at(0)))
-  function_ = std::negate<double>(); 
-}
 
 
 
@@ -212,7 +207,7 @@ std::string s21::Token::ReadToken(std::string& input, size_t& index) const {
     pattern = ("\\d+([.]\\d+)?(e([-+])?\\d+)?");
   else if (isalpha(input.at(index))) 
     pattern = "([%cosintaqrtlgx]+)";
-  else pattern = "([-( )^/*+])";
+  else pattern = "([-( )^%*+\\/])";
 
   std::sregex_iterator regex_iterator =
       std::sregex_iterator(input.begin() + index, input.end(), pattern);
@@ -229,6 +224,7 @@ void s21::Token::CreateTokenMap(std::map<std::string, s21::Token>& token_map) {
   initializer_list<pair<const string, Token>> list = {
       {"+", Token("+", kLow, kLeft, kBinaryOperator, std::plus<double>())},
       {"-", Token("-", kLow, kLeft, kBinaryOperator, std::minus<double>())},
+      {"%", Token("mod", kMedium, kLeft, kBinaryOperator, fmodl)},
       {"*",
        Token("*", kMedium, kLeft, kBinaryOperator, std::multiplies<double>())},
       {" ", Token(" ", kDefault, kNone, kNumber, nullptr)},
@@ -237,7 +233,6 @@ void s21::Token::CreateTokenMap(std::map<std::string, s21::Token>& token_map) {
       {")", Token(")", kDefault, kNone, kCloseBracket, nullptr)},
       {"/", Token("/", kMedium, kLeft, kBinaryOperator, std::divides<double>())},
       {"^", Token("^", kHigh, kRight, kBinaryOperator, powl)},
-      {"%", Token("mod", kMedium, kLeft, kBinaryOperator, fmodl)},
       {"cos", Token("cos", kFunction, kRight, kUnaryFunction, cosl)},
       {"sin", Token("sin", kFunction, kRight, kUnaryFunction, sinl)},
       {"tan", Token("tan", kFunction, kRight, kUnaryFunction, tanl)},
@@ -259,11 +254,7 @@ void s21::Token::Counting() {
         std::cout<< "now token   "<<queue_token_.top().GetName() << std::endl;
     std::visit(
         overloaded{
-          [&](double function) {
-            std::cout << "цыфра" << std::endl;
-            PushToResult(function);
-          },
-
+          
           [&](unary_function function) {
             PushToResult(function(PopFromResult()));
           },
@@ -274,18 +265,8 @@ void s21::Token::Counting() {
             PushToResult(function(left_argument, right_argument));
           },
 
-          [&](auto) {
-          std::cout << "скобка" << std::endl;
-          std::string bracet = queue_token_.top().GetName();
-          if (bracet != "(" && bracet != ")") PushToResult(x_value_); 
-          else if (bracet == ")") {
-            while (queue_token_.top().GetName() != "("){
-              
-              queue_token_.pop();
-              queue_token_.top().GetFunction();
-              Counting();
-            }
-          }}},
+          [&](auto) {}
+          },
 
         queue_token_.top().GetFunction()
         );
@@ -301,17 +282,6 @@ void s21::Token::PushNumberToStack(std::string name, double value) {
   queue_number_.push(result);
 }
 
-int s21::Token::TryToPushTokenToStack(std::string token) {
-    // std::cout << "token "<< token << std::endl;
-
-  if (token == " ") return 0;
-  auto found_token = token_map_.find(token);
-  if (found_token == token_map_.end())
-    throw std::string("INVALID CHARACTER(S) " + token);
-
-  queue_token_.push(found_token->second);
-  return 1;
-}
 
 void s21::Token::PushTokenToQueue(std::string input){
   auto found_token = token_map_.find(input);
@@ -345,7 +315,7 @@ double s21::Token::PopFromResult() {
 
 }  // namespace s21
 
-int s21::YmdToMord(char* date) {
+int s21::YmdToMord(const char* date) {
   int new_year, new_month, new_day;
   if (sscanf(date, "%d.%d.%d", &new_year, &new_month, &new_day) != 3) {
     return -1;

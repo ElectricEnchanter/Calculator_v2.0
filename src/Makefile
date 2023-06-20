@@ -15,7 +15,7 @@ endif
 all: clean pognal
 
 pognal:
-	$(CC) $(FLAGS) Token.cc && ./a.out
+	$(CC) $(FLAGS) -g Token.cc && ./a.out
 
 run: install
 	build/Calculator.app/Contents/MacOS/Calculator
@@ -52,4 +52,4 @@ dvi:
 	open dvi.html
 
 clean:
-	rm -rf build* ../.vscode a.out *.gcno *.gcda *.info coverage_report Token.dSYM Token
+	rm -rf build* ../.vscode a.out *.gcno *.gcda *.info coverage_report Token.dSYM Token report

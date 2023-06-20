@@ -77,7 +77,6 @@ class Token {
   Associativity GetAssociativity() const;
   Type GetType() const;
   function_variant GetFunction() const;
-  void SetFunction();
   double GetAnswer();
   void SetAnswer();
   void CalculateAnswer(std::string input, std::string input_x);
@@ -85,7 +84,7 @@ class Token {
   void Counting();
 
   std::string ReadToken(std::string& input, size_t& start_index) const;
-  int TryToPushTokenToStack(std::string token);
+
 
   void CreateTokenMap(std::map<std::string, s21::Token>& temp_map);
 
@@ -125,23 +124,9 @@ static std::stack<s21::Token> queue_number_;
   function_variant function_;
 };
 
-int YmdToMord(char* date);
+int YmdToMord(const char* date);
 
 };  // namespace s21
 
 #endif  // TOKEN_H_
 
-
-    // }else if (token == "-"){
-    //   if (i == 0 || (!queue_token_.empty() && queue_token_.top().GetName() == "(")){
-    //     Token a("-", kHigh, kRight, kUnaryPrefixOperator, std::negate<double>());
-    //     queue_token_.push(a);
-    //   } 
-    //   else queue_token_.push(queue_.front());
-    // }else if (token == "+"){
-    //   if (i == 0) continue;
-    //   if (!queue_token_.empty() && queue_token_.top().GetName() == "(") continue;
-    //   else queue_token_.push(queue_.front());
-
-      //     if (i == 0 || (!queue_token_.empty() && queue_token_.top().GetName() == "(")) continue;
-      // else queue_token_.push(queue_.front());
