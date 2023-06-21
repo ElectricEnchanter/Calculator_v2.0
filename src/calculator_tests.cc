@@ -368,12 +368,12 @@ s21::Token w;
   EXPECT_ANY_THROW(w.CalculateAnswer(a, b));
 }
 
-// TEST(Fall, test5){
-// s21::Token w;
-//   std::string a = "8(9)";
-//   std::string b = "";
-//   EXPECT_ANY_THROW(w.CalculateAnswer(a, b));
-// }
+TEST(Fall, test5){
+s21::Token w;
+  std::string a = "8(9)";
+  std::string b = "";
+  EXPECT_ANY_THROW(w.CalculateAnswer(a, b));
+}
 
 TEST(Fall, test6){
 s21::Token w;
@@ -424,59 +424,44 @@ s21::Token w;
   EXPECT_ANY_THROW(w.CalculateAnswer(a, b));
 }
 
-// TEST(Fall, test13){
-// s21::Token w;
-//   std::string a = "2.233.4+sin()+3";
-//   std::string b = "";
-//   EXPECT_ANY_THROW(w.CalculateAnswer(a, b));
-
-  //(\b(?:\d+\.)+\d+(?:)?)
-  // 2.3.2^2
-  // 2.3.2+
-  // 2.233.4+sin()+3
-  // 333.444.422
-  // 12.34.55
-  // 2.233.4+sin()+3
+TEST(Fall, test13){
+s21::Token w;
+  std::string a = "2.233.4+sin()+3";
+  std::string b = "";
+  EXPECT_ANY_THROW(w.CalculateAnswer(a, b));
 }
 
-// TEST(Fall, test14){
-// s21::Token w;
-//   std::string a = "2--2";
-//   std::string b = "";
-//   EXPECT_ANY_THROW(w.CalculateAnswer(a, b));
+TEST(Fall, test14){
+s21::Token w;
+  std::string a = "2--2";
+  std::string b = "";
+  EXPECT_ANY_THROW(w.CalculateAnswer(a, b));
+}
 
-//(\b\d+(?:(?:[+\-*\/^%]{2,}|(?!\/)\/)[\s]*)?\d+\b)
-// 2--2
-// 2**2
-// 2++2
-// 2^^2
-// 2%%2
-// 2//2
-// но не 
-// 2.2
-// 2 2
-// 2-2
-// 2*2
-// 2+2
-// 2^2
-// 2%2
-// 2/2
-// 2+cos(2)
-// 2. 2
-// 2 2
-// }
+TEST(Fall, test15){
+s21::Token w;
+  std::string a = "4.3-----2";
+  std::string b = "";
+  EXPECT_ANY_THROW(w.CalculateAnswer(a, b));
+}
 
-// TEST(Fall, test15){
-// s21::Token w;
-//   std::string a = "2.3.2^2";
-//   std::string b = "";
-//   EXPECT_ANY_THROW(w.CalculateAnswer(a, b));
-// }
+TEST(Fall, test16){
+s21::Token w;
+  std::string a = "2.3.2^2";
+  std::string b = "";
+  EXPECT_ANY_THROW(w.CalculateAnswer(a, b));
+}
+
+TEST(Fall, test17){
+s21::Token w;
+  std::string a = "(2.32^2)/4)";
+  std::string b = "";
+  EXPECT_ANY_THROW(w.CalculateAnswer(a, b));
+}
 
 
 
 TEST(YmdToMord, test1){
-
   const char *data = "2022.20.20";
   int num = 739060;
   int result_num = s21::YmdToMord(data);
@@ -484,7 +469,6 @@ TEST(YmdToMord, test1){
 }
 
 TEST(YmdToMord, test2){
-
   const char *data = "2022.20";
   int num = -1;
   int result_num = s21::YmdToMord(data);

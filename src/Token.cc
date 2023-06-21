@@ -1,19 +1,5 @@
 #include "Token.h"
 
-// int main() {
-//   s21::Token w;
-//   std::string a = "2.233.4";
-//   std::string b = "";
-//   w.CalculateAnswer(a, b);
-//   w.GetAnswer();
-
-//  std::cout << "ответ " << w.GetAnswer() << std::endl;
-
-//  return 1; 
-// }
-
-// унарники и пробелы
-
 
 namespace s21 {
 
@@ -67,13 +53,18 @@ void s21::Token::CalculateAnswer(std::string input, std::string input_x) {
 
 void s21::Token::FindSpacesAndUnaries(){
   int size = queue_.size();
-  int flag = 0;
+  int openBracket = 0;
+  int closeBracket = 0;
   
   for (int i = 0; i < size; ++i, queue_.pop()){
     std::string token = queue_.front().GetName();
 
     if(token == ")") {
-      flag--;
+      closeBracket++;
+      if (closeBracket > openBracket)
+      throw std::string("скобка");
+
+
       std::cout << queue_token_.top().GetName()<< std::endl;
       while(queue_token_.top().GetName() != "("){
         Counting();
@@ -95,11 +86,12 @@ void s21::Token::FindSpacesAndUnaries(){
           queue_token_.push(a);
         }
     }else if(queue_token_.empty() && token != "x"){
+      if (token == "(") openBracket++;
        queue_token_.push(queue_.front());
     }
     else if(token == "("){
       i++;
-      flag++;
+      openBracket++;
       queue_token_.push(queue_.front());
       queue_.pop();
       token = queue_.front().GetName();
@@ -108,6 +100,10 @@ void s21::Token::FindSpacesAndUnaries(){
       else if (token == "-"){
         Token a("-", kLow, kRight, kUnaryPrefixOperator, std::negate<double>());
         queue_token_.push(a);
+      }
+      else if (token == "(") {
+        queue_token_.push(queue_.front());
+        openBracket++;
       }
       else if (token == "x") {
         std::ostringstream ost;
@@ -125,6 +121,8 @@ void s21::Token::FindSpacesAndUnaries(){
     
   }
 
+  if(openBracket != closeBracket)
+    throw std::string("скобки");
   while(!queue_token_.empty()){
     Counting();
   }
@@ -159,18 +157,28 @@ void s21::Token::Validator(std::string input, std::string input_x) {
   throw std::string("INVALID CHARACTER(S)");
 
   pattern = ".*[\\dx].*";
-  if (!std::regex_search(input.c_str(), result, pattern) )
+  if (!std::regex_search(input.c_str(), result, pattern))
   throw std::string("NO NUMBERS OR X VARIABLE");
 
   pattern = ".*\\. \\d.*";
-  if (std::regex_search(input.c_str(), result, pattern) )
+  if (std::regex_search(input.c_str(), result, pattern))
   throw std::string("INVALID CHARACTER(S)");
+
+  pattern = "[^\\d()]+";
+  if (!std::regex_search(input.c_str(), result, pattern))
+  throw std::string("INVALID CHARACTER(S)");
+
 
   // pattern = "(\\b\\d+(?:(?:[+\\-*/^%]{2,}|(?!\\/)\\/)[\\s]*)?\\d+\\b)";
-  pattern = "(\b(?:\\d+\\.)+\\d+(?:)?)";
+  // pattern = "(\\b(?:\\d+\\.)+\\d+(?:)?)";
+  // pattern = "(\b(?:\\d+\\.)+\\d+(?:)?)";
+  pattern = "(\\b\\d+\\.\\d+\\.\\d+\\b)";
   if (std::regex_search(input.c_str(), result, pattern) )
   throw std::string("INVALID CHARACTER(S)");
 
+  pattern = "((\\d+(?:\\.\\d+)?)[+\\-*/^%]{2,}(\\d+(?:\\.\\d+)?))";
+  if (std::regex_search(input.c_str(), result, pattern) )
+  throw std::string("INVALID CHARACTER(S)");
 
   for (size_t index = 0; input.length() > index; ++index) {
     std::string token = ReadToken(input, index);
