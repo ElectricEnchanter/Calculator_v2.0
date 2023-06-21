@@ -1,5 +1,15 @@
 #include "Token.h"
 
+// int main(){
+//   std::string a = ".2-.4";
+//   std::string b = "";
+//   s21::Token w;
+//   w.CalculateAnswer(a, b);
+
+//   std::cout << "otvet:  " << w.GetAnswer() << std::endl;
+//   return 0;
+// }
+
 
 namespace s21 {
 
@@ -120,9 +130,6 @@ void s21::Token::FindSpacesAndUnaries(){
     
     
   }
-
-  if(openBracket != closeBracket)
-    throw std::string("скобки");
   while(!queue_token_.empty()){
     Counting();
   }
@@ -149,46 +156,39 @@ void s21::Token::Conditions(){
 void s21::Token::Validator(std::string input, std::string input_x) {
   if(!input_x.empty())
   x_value_ = stod(input_x);
-
   std::cmatch result;
-  std::regex pattern("[^-/ %.cosintaqrtlgx()^/*+0-9]");
+  std::regex pattern;
+  int i = 0;
+  while(i < 4){
+    switch(i){
+      case 0: pattern = "[^-/ %.cosintaqrtlgx()^/*+0-9]";
+        break;
+      case 1: pattern = ".*\\. \\d.*";
+        break;
+      case 2: pattern = "(\\b\\d+\\.\\d+\\.\\d+\\b)";
+        break;
+      case 3: pattern = "((\\d+(?:\\.\\d+)?)[+\\-*/^%]{2,}(\\d+(?:\\.\\d+)?))";
+        break;
+    }
+    if (std::regex_search(input.c_str(), result, pattern))
+    throw std::string("INVALID CHARACTER(S)");
+    ++i;
+  }
 
-  if (std::regex_search(input.c_str(), result, pattern))
-  throw std::string("INVALID CHARACTER(S)");
-
-  pattern = ".*[\\dx].*";
-  if (!std::regex_search(input.c_str(), result, pattern))
-  throw std::string("NO NUMBERS OR X VARIABLE");
-
-  pattern = ".*\\. \\d.*";
-  if (std::regex_search(input.c_str(), result, pattern))
-  throw std::string("INVALID CHARACTER(S)");
-
-  pattern = "[^\\d()]+";
-  if (!std::regex_search(input.c_str(), result, pattern))
-  throw std::string("INVALID CHARACTER(S)");
-
-
-  // pattern = "(\\b\\d+(?:(?:[+\\-*/^%]{2,}|(?!\\/)\\/)[\\s]*)?\\d+\\b)";
-  // pattern = "(\\b(?:\\d+\\.)+\\d+(?:)?)";
-  // pattern = "(\b(?:\\d+\\.)+\\d+(?:)?)";
-  pattern = "(\\b\\d+\\.\\d+\\.\\d+\\b)";
-  if (std::regex_search(input.c_str(), result, pattern) )
-  throw std::string("INVALID CHARACTER(S)");
-
-  pattern = "((\\d+(?:\\.\\d+)?)[+\\-*/^%]{2,}(\\d+(?:\\.\\d+)?))";
-  if (std::regex_search(input.c_str(), result, pattern) )
-  throw std::string("INVALID CHARACTER(S)");
 
   for (size_t index = 0; input.length() > index; ++index) {
-    std::string token = ReadToken(input, index);
-    if (isdigit(token.at(0))){
-      Token result(token, kDefault, kNone, kNumber, stod(token));
-      queue_.push(result);
+    try{
+      if (input.at(index) == '.')
+      throw std::string("INVALID CHARACTER(S)");
+      std::string token = ReadToken(input, index);
+      if (isdigit(token.at(0))){
+        Token result(token, kDefault, kNone, kNumber, stod(token));
+        queue_.push(result);
       }
-        else if (token == " ") continue;
-      
+      else if (token == " ") continue;
       else PushTokenToQueue(token);
+    } catch (std::string error_message){}
+
   }
 }
 
@@ -281,7 +281,7 @@ void s21::Token::PushNumberToStack(std::string name, double value) {
 void s21::Token::PushTokenToQueue(std::string input){
   auto found_token = token_map_.find(input);
   if (found_token == token_map_.end())
-    throw std::string("INVALID CHARACTER(S) " + input);
+    throw std::string("INVALID CHARACTER(S)");
 
   queue_.push(found_token->second);
 }

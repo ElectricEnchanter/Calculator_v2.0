@@ -15,7 +15,7 @@ endif
 all: pognal
 
 pognal:
-	$(CC) $(FLAGS) -g Token.cc && ./a.out
+	$(CC) $(FLAGS) Token.cc && ./a.out
 
 run: install
 	build/Calculator.app/Contents/MacOS/Calculator

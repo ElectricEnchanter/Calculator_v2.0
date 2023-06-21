@@ -459,6 +459,26 @@ s21::Token w;
   EXPECT_ANY_THROW(w.CalculateAnswer(a, b));
 }
 
+TEST(Fall, test18){
+s21::Token w;
+  std::string a = ".2-.4";
+  std::string b = "";
+  EXPECT_ANY_THROW(w.CalculateAnswer(a, b));
+}
+
+TEST(Fall, test19){
+s21::Token w;
+  std::string a = "1.3*cos(2))";
+  std::string b = "";
+  EXPECT_ANY_THROW(w.CalculateAnswer(a, b));
+}
+
+TEST(Fall, test20){
+s21::Token w;
+  std::string a = "1.3*cos((2)";
+  std::string b = "";
+  EXPECT_ANY_THROW(w.CalculateAnswer(a, b));
+}
 
 
 TEST(YmdToMord, test1){
