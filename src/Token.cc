@@ -1,36 +1,35 @@
 #include "Token.h"
 
-// int main(){
-//   std::string a = ".2-.4";
-//   std::string b = "";
-//   s21::Token w;
-//   w.CalculateAnswer(a, b);
+int main(){
+  std::string a = "1.53232+cos((1))";
+  std::string b = "";
+  s21::Token w;
+  w.CalculateAnswer(a, b);
 
-//   std::cout << "otvet:  " << w.GetAnswer() << std::endl;
-//   return 0;
-// }
+
+  std::cout << "otvet:  " << w.GetAnswer() << std::endl;
+  return 0;
+}
 
 
 namespace s21 {
+std::queue<Token> Token::queue_;
+std::stack<s21::Token> Token::stack_token_;
+std::stack<s21::Token> Token::stack_number_;
 
-s21::Token::Token(const std::string& name, Precedence precedence,
+s21::Token::Token(const std::string& name, Priority priority,
                   Associativity associativity, Type type,
                   function_variant function)
     : name_(name),
-      precedence_(precedence),
+      priority_(priority),
       associativity_(associativity),
       type_(type),
       function_(function){};
 
 
-std::queue<Token> Token::queue_;
-std::stack<s21::Token> Token::queue_token_;
-std::stack<s21::Token> Token::queue_number_;
-
-
 std::string s21::Token::GetName() const { return name_; }
 
-s21::Precedence s21::Token::GetPrecedence() const { return precedence_; }
+s21::Priority s21::Token::GetPriority() const { return priority_; }
 
 s21::Associativity s21::Token::GetAssociativity() const {
   return associativity_;
@@ -42,173 +41,13 @@ s21::function_variant s21::Token::GetFunction() const { return function_; }
 
 double s21::Token::GetAnswer() { return answer_; }
 
-void s21::Token::SetAnswer() {
-
-  std::cout << queue_number_.top().GetName() <<std::endl;
-  answer_ = stod(queue_number_.top().GetName());
-  queue_number_.pop();
-}
-
 void s21::Token::CalculateAnswer(std::string input, std::string input_x) {
-  if (input.empty())  throw std::string("EMPTY LINE");
-
+  if (input.empty()) throw std::string("EMPTY LINE");
   CreateTokenMap(token_map_);
   ConvertToLower();
   Validator(input, input_x);
-  FindSpacesAndUnaries();
-
+  Parser();
   SetAnswer();
- 
-}
-
-void s21::Token::FindSpacesAndUnaries(){
-  int size = queue_.size();
-  int openBracket = 0;
-  int closeBracket = 0;
-  
-  for (int i = 0; i < size; ++i, queue_.pop()){
-    std::string token = queue_.front().GetName();
-
-    if(token == ")") {
-      closeBracket++;
-      if (closeBracket > openBracket)
-      throw std::string("скобка");
-
-
-      std::cout << queue_token_.top().GetName()<< std::endl;
-      while(queue_token_.top().GetName() != "("){
-        Counting();
-      }
-      queue_token_.pop();
-    }
-    if (token == "x"){
-      std::ostringstream ost;
-      ost << x_value_;
-      Token result(ost.str(), kDefault, kNone, kNumber, x_value_);
-      queue_number_.push(result);
-    }
-    if (isdigit(token.at(0))){
-      queue_number_.push(queue_.front());
-    }else if (i == 0 && (token == "+" || token == "-")){
-        if (token == "+") continue;
-        if (token == "-") {
-          Token a("-", kLow, kRight, kUnaryPrefixOperator, std::negate<double>());
-          queue_token_.push(a);
-        }
-    }else if(queue_token_.empty() && token != "x"){
-      if (token == "(") openBracket++;
-       queue_token_.push(queue_.front());
-    }
-    else if(token == "("){
-      i++;
-      openBracket++;
-      queue_token_.push(queue_.front());
-      queue_.pop();
-      token = queue_.front().GetName();
-      if (isdigit(token.at(0))) queue_number_.push(queue_.front());
-      else if (token == "+") continue;
-      else if (token == "-"){
-        Token a("-", kLow, kRight, kUnaryPrefixOperator, std::negate<double>());
-        queue_token_.push(a);
-      }
-      else if (token == "(") {
-        queue_token_.push(queue_.front());
-        openBracket++;
-      }
-      else if (token == "x") {
-        std::ostringstream ost;
-      ost << x_value_;
-      Token result(ost.str(), kDefault, kNone, kNumber, x_value_);
-      queue_number_.push(result);
-      }
-      else queue_token_.push(queue_.front());
-
-    } 
-    else if (token != ")" && token != "x" )
-      Conditions();
-
-    
-    
-  }
-  while(!queue_token_.empty()){
-    Counting();
-  }
-}
-
-void s21::Token::Conditions(){
-  std::cout << "Условия" << std::endl;
-  std::cout <<queue_token_.top().GetName() <<queue_token_.top().GetPrecedence() << std::endl;
-  std::cout <<queue_.front().GetName() <<queue_.front().GetPrecedence() << std::endl;
-
-
-  if(queue_token_.top().GetPrecedence() > queue_.front().GetPrecedence() || queue_token_.top().GetPrecedence() == queue_.front().GetPrecedence() ){
-    
-    Counting();
-    queue_token_.push(queue_.front());
-  }else {
-    queue_token_.push(queue_.front());
-  }
-}
-
-
-
-
-void s21::Token::Validator(std::string input, std::string input_x) {
-  if(!input_x.empty())
-  x_value_ = stod(input_x);
-  std::cmatch result;
-  std::regex pattern;
-  int i = 0;
-  while(i < 4){
-    switch(i){
-      case 0: pattern = "[^-/ %.cosintaqrtlgx()^/*+0-9]";
-        break;
-      case 1: pattern = ".*\\. \\d.*";
-        break;
-      case 2: pattern = "(\\b\\d+\\.\\d+\\.\\d+\\b)";
-        break;
-      case 3: pattern = "((\\d+(?:\\.\\d+)?)[+\\-*/^%]{2,}(\\d+(?:\\.\\d+)?))";
-        break;
-    }
-    if (std::regex_search(input.c_str(), result, pattern))
-    throw std::string("INVALID CHARACTER(S)");
-    ++i;
-  }
-
-
-  for (size_t index = 0; input.length() > index; ++index) {
-    try{
-      if (input.at(index) == '.')
-      throw std::string("INVALID CHARACTER(S)");
-      std::string token = ReadToken(input, index);
-      if (isdigit(token.at(0))){
-        Token result(token, kDefault, kNone, kNumber, stod(token));
-        queue_.push(result);
-      }
-      else if (token == " ") continue;
-      else PushTokenToQueue(token);
-    } catch (std::string error_message){}
-
-  }
-}
-
-void s21::Token::ConvertToLower() {
-  std::transform(input_.begin(), input_.end(), input_.begin(), ::tolower);
-}
-
-std::string s21::Token::ReadToken(std::string& input, size_t& index) const {
-  std::regex pattern;
-  if (isdigit(input.at(index))) 
-    pattern = ("\\d+([.]\\d+)?(e([-+])?\\d+)?");
-  else if (isalpha(input.at(index))) 
-    pattern = "([%cosintaqrtlgx]+)";
-  else pattern = "([-( )^%*+\\/])";
-
-  std::sregex_iterator regex_iterator =
-      std::sregex_iterator(input.begin() + index, input.end(), pattern);
-  std::smatch match = *regex_iterator;
-  index += match.length() - 1;
-  return match.str();
 }
 
 void s21::Token::CreateTokenMap(std::map<std::string, s21::Token>& token_map) {
@@ -238,43 +77,182 @@ void s21::Token::CreateTokenMap(std::map<std::string, s21::Token>& token_map) {
       {"ln", Token("ln", kFunction, kRight, kUnaryFunction, logl)},
       {"log", Token("log", kFunction, kRight, kUnaryFunction, log10l)},
       {"neg", Token("-", kLow, kRight, kUnaryPrefixOperator, std::negate<double>())},
-
   };
   token_map.insert(list);
 }
 
-void s21::Token::Counting() {
+std::string s21::Token::ReadToken(std::string& input, size_t& index) const {
+  std::regex pattern;
+  if (isdigit(input.at(index))) 
+    pattern = ("\\d+([.]\\d+)?(e([-+])?\\d+)?");
+  else if (isalpha(input.at(index))) 
+    pattern = "([%cosintaqrtlgx]+)";
+  else pattern = "([-( )^%*+\\/])";
 
-
-        std::cout<< "now token   "<<queue_token_.top().GetName() << std::endl;
-    std::visit(
-        overloaded{
-          
-          [&](unary_function function) {
-            PushToResult(function(PopFromResult()));
-          },
-
-          [&](binary_function function) {
-            double right_argument = PopFromResult();
-            double left_argument = PopFromResult();
-            PushToResult(function(left_argument, right_argument));
-          },
-
-          [&](auto) {}
-          },
-
-        queue_token_.top().GetFunction()
-        );
-         queue_token_.pop();
-
+  std::sregex_iterator regex_iterator =
+      std::sregex_iterator(input.begin() + index, input.end(), pattern);
+  std::smatch match = *regex_iterator;
+  index += match.length() - 1;
+  return match.str();
 }
 
+void s21::Token::ConvertToLower() {
+  std::transform(input_.begin(), input_.end(), input_.begin(), ::tolower);
+}
 
+void s21::Token::Validator(std::string input, std::string input_x) {
+  if(!input_x.empty()) x_value_ = stod(input_x);
 
-void s21::Token::PushNumberToStack(std::string name, double value) {
-  std::cout << "пушу " <<  value  << std::endl;
+  std::cmatch result;
+  std::regex pattern;
+  int i {0};
+  
+  while(i < 4){
+    switch(i){
+      case 0: pattern = "[^-/ %.cosintaqrtlgx()^/*+0-9]";
+        break;
+      case 1: pattern = ".*\\. \\d.*";
+        break;
+      case 2: pattern = "(\\b\\d+\\.\\d+\\.\\d+\\b)";
+        break;
+      case 3: pattern = "((\\d+(?:\\.\\d+)?)[+\\-*/^%]{2,}(\\d+(?:\\.\\d+)?))";
+        break;
+    }
+    if (std::regex_search(input.c_str(), result, pattern))
+    throw std::string("INVALID CHARACTER(S)");
+    ++i;
+  }
+
+  for (size_t index = 0; input.length() > index; ++index) {
+    try{
+      if (input.at(index) == '.')
+      throw std::string("INVALID CHARACTER(S)");
+      std::string token = ReadToken(input, index);
+      if (isdigit(token.at(0))){
+        Token result(token, kDefault, kNone, kNumber, stod(token));
+        queue_.push(result);
+      }
+      else if (token == " ") continue;
+      else PushTokenToQueue(token);
+    } catch (std::string error_message){}
+  }
+}
+
+void s21::Token::Parser(){
+  int size = queue_.size();
+  // возможно попать в конце
+  // передавать токен в рекурсию
+  //бесконечные скобки
+  for (int i = 0; i < size; ++i, queue_.pop()){
+    std::string token = queue_.front().GetName();
+
+    if(token == "("){
+      ++i;
+      ++bracket_;
+      stack_token_.push(queue_.front());
+      queue_.pop();
+      token = queue_.front().GetName();
+      if (isdigit(token[0])) stack_number_.push(queue_.front());
+      else if (token == "+") continue;
+      else if (token == "-"){
+        Token a("-", kLow, kRight, kUnaryPrefixOperator, std::negate<double>());
+        stack_token_.push(a);
+      }
+      else if (token == "(") {
+        ++i;
+        ++bracket_;
+        queue_.pop();
+        Parser();
+      }
+      else if (token == "x") PushNumberToStack(x_value_);
+      else stack_token_.push(queue_.front());
+    }
+    else if (i == 0 && token == "+") continue;
+    else if (i == 0 &&token == "-") {
+        Token a("-", kLow, kRight, kUnaryPrefixOperator, std::negate<double>());
+        stack_token_.push(a);
+    }
+    else if (token == "x") PushNumberToStack(x_value_);
+    else if(token == ")") {
+      --bracket_;
+      if (bracket_ < 0)
+        throw std::string("скобка");
+
+        //хуита
+      if(stack_token_.top().GetName() != "("){
+        while(stack_token_.top().GetName() != "("){
+        std::cout << stack_token_.top().GetName() << std::endl;
+        Counting();
+        }
+      } else {
+        stack_token_.pop();
+      }
+
+      }
+    
+    else if (isdigit(token[0])) stack_number_.push(queue_.front());
+    else if(stack_token_.empty()){
+      if (token == "(") ++bracket_;
+      stack_token_.push(queue_.front());
+    }
+    else if (token != ")") Conditions();
+
+  }
+  while(!stack_token_.empty()) Counting();
+}
+
+void s21::Token::Counting() {
+  std::visit(
+      overloaded{
+        [&](unary_function function) {
+          PushNumberToStack(function(PopFromResult()));
+        },
+
+        [&](binary_function function) {
+          double right_argument = PopFromResult();
+          double left_argument = PopFromResult();
+          PushNumberToStack(function(left_argument, right_argument));
+        },
+
+        [&](auto) {}
+        },
+
+      stack_token_.top().GetFunction()
+      );
+      stack_token_.pop();
+}
+
+void s21::Token::Conditions(){
+  int lastToken = stack_token_.top().GetPriority();
+  int currentToken = queue_.front().GetPriority();
+
+  if (lastToken > currentToken || lastToken == currentToken ){
+    Counting();
+    stack_token_.push(queue_.front());
+  } else stack_token_.push(queue_.front());
+}
+
+void s21::Token::SetAnswer() {
+  answer_ = stod(stack_number_.top().GetName());
+  stack_number_.pop();
+}
+
+double s21::Token::PopFromResult() {
+  if(stack_number_.empty())
+   throw std::string("NOT ENOUGH NUMBERS");
+
+  s21::Token number = stack_number_.top();
+  std::string name = number.GetName();
+  stack_number_.pop();
+  return stod(name);
+}
+
+void s21::Token::PushNumberToStack(double value) {
+  std::ostringstream token;
+  token << value;
+  std::string name = token.str();
   Token result(name, kDefault, kNone, kNumber, value);
-  queue_number_.push(result);
+  stack_number_.push(result);
 }
 
 
@@ -282,30 +260,7 @@ void s21::Token::PushTokenToQueue(std::string input){
   auto found_token = token_map_.find(input);
   if (found_token == token_map_.end())
     throw std::string("INVALID CHARACTER(S)");
-
   queue_.push(found_token->second);
-}
-
-
-
-void s21::Token::PushToResult(double value) {
-  std::ostringstream token;
-  token << value;
-  std::string str = token.str();
-  PushNumberToStack(str, value);
-}
-
-double s21::Token::PopFromResult() {
-  if(queue_number_.empty())
-   throw std::string("NOT ENOUGH NUMBERS");
-  else {
-  s21::Token s = queue_number_.top();
-  std::string a = s.GetName();
-  std::cout << "беру       "<< stod(a) << std::endl;
-  queue_number_.pop();
-  return stod(a);
-  }
-
 }
 
 }  // namespace s21

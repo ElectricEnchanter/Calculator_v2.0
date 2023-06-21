@@ -16,7 +16,7 @@
 
 namespace s21 {
 
-enum Precedence {
+enum Priority {
   kDefault,
   kLow,
   kMedium,
@@ -63,65 +63,51 @@ overloaded(Ts...) -> overloaded<Ts...>;
 class Token {
  public:
   Token() = default;
-  Token(const std::string& name, Precedence precedence,
+  Token(const std::string& name, Priority priority,
         Associativity associativity, Type type, function_variant function);
   Token(const Token&) = default;
   Token(const Token&& ) = delete;
-
   ~Token() = default;
 
-  void Counting(double x_value);
-
   std::string GetName() const;
-  Precedence GetPrecedence() const;
+  Priority GetPriority() const;
   Associativity GetAssociativity() const;
   Type GetType() const;
   function_variant GetFunction() const;
+
   double GetAnswer();
-  void SetAnswer();
   void CalculateAnswer(std::string input, std::string input_x);
-  void Conditions();
-  void Counting();
 
-  std::string ReadToken(std::string& input, size_t& start_index) const;
-
-
-  void CreateTokenMap(std::map<std::string, s21::Token>& temp_map);
-
-  void PushNumberToStack(std::string name, double value);
-
-  void FindSpacesAndUnaries();
-  void Validator(std::string input, std::string output);
-  void ConvertToLower();
-
-  double PopFromResult();
-  void PushToResult(double value);
-  void PushTokenToQueue(std::string input);
-
-
-  std::map<std::string, Token> token_map_;
-
-  std::string input_;
-  std::string input_x_;
+  private:
+  std::string name_;
+  Priority priority_;
+  Associativity associativity_;
+  Type type_;
+  function_variant function_;
 
   double answer_{NAN};
   double x_value_{NAN};
 
+  std::string input_;
+  std::string input_x_;
+  int bracket_ {0};
 
+  static  std::queue<s21::Token> queue_;
+  static std::stack<s21::Token> stack_token_;
+  static std::stack<s21::Token> stack_number_;
+  std::map<std::string, Token> token_map_;
 
-
-
-static  std::queue<s21::Token> queue_;
-
-static std::stack<s21::Token> queue_token_;
-static std::stack<s21::Token> queue_number_;
-
- private:
-  std::string name_;
-  Precedence precedence_;
-  Associativity associativity_;
-  Type type_;
-  function_variant function_;
+  void CreateTokenMap(std::map<std::string, s21::Token>& temp_map);
+  std::string ReadToken(std::string& input, size_t& start_index) const;
+  void ConvertToLower();
+  void Validator(std::string input, std::string output);
+  void Parser();
+  void Counting();
+  void Conditions();
+  void SetAnswer();
+  double PopFromResult();
+  void PushNumberToStack(double value);
+  void PushTokenToQueue(std::string input);
 };
 
 int YmdToMord(const char* date);
