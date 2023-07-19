@@ -1,17 +1,5 @@
 #include "Token.h"
 
-int main(){
-  std::string a = "1.53232+cos((1))";
-  std::string b = "";
-  s21::Token w;
-  w.CalculateAnswer(a, b);
-
-
-  std::cout << "otvet:  " << w.GetAnswer() << std::endl;
-  return 0;
-}
-
-
 namespace s21 {
 std::queue<Token> Token::queue_;
 std::stack<s21::Token> Token::stack_token_;
@@ -46,8 +34,16 @@ void s21::Token::CalculateAnswer(std::string input, std::string input_x) {
   CreateTokenMap(token_map_);
   ConvertToLower();
   Validator(input, input_x);
+  FindUnaries(input);
   Parser();
   SetAnswer();
+  CleanStacks();
+}
+
+void s21::Token::CleanStacks(){
+  while (!queue_.empty()) queue_.pop();
+  while (!stack_token_.empty()) stack_token_.pop();
+  while (!stack_number_.empty()) stack_number_.pop();
 }
 
 void s21::Token::CreateTokenMap(std::map<std::string, s21::Token>& token_map) {
@@ -122,7 +118,9 @@ void s21::Token::Validator(std::string input, std::string input_x) {
     throw std::string("INVALID CHARACTER(S)");
     ++i;
   }
+}
 
+void s21::Token::FindUnaries(std::string input){
   for (size_t index = 0; input.length() > index; ++index) {
     try{
       if (input.at(index) == '.')
@@ -133,6 +131,27 @@ void s21::Token::Validator(std::string input, std::string input_x) {
         queue_.push(result);
       }
       else if (token == " ") continue;
+      else if (index == 0){
+        if (token == "+") continue;
+        else if(token == "-") {
+          Token a("-", kLow, kRight, kUnaryPrefixOperator, std::negate<double>());
+          queue_.push(a);
+        }
+      }
+      else if (token == "("){
+        PushTokenToQueue(token);
+        token = ReadToken(input, ++index);
+        if (token == "+") continue;
+        else if(token == "-") {
+          Token a("-", kLow, kRight, kUnaryPrefixOperator, std::negate<double>());
+          queue_.push(a);
+        }
+        else if (isdigit(token.at(0))){
+          Token result(token, kDefault, kNone, kNumber, stod(token));
+          queue_.push(result);
+        }
+        else PushTokenToQueue(token);
+      }
       else PushTokenToQueue(token);
     } catch (std::string error_message){}
   }
@@ -140,63 +159,27 @@ void s21::Token::Validator(std::string input, std::string input_x) {
 
 void s21::Token::Parser(){
   int size = queue_.size();
-  // возможно попать в конце
-  // передавать токен в рекурсию
-  //бесконечные скобки
-  for (int i = 0; i < size; ++i, queue_.pop()){
-    std::string token = queue_.front().GetName();
-
-    if(token == "("){
-      ++i;
-      ++bracket_;
-      stack_token_.push(queue_.front());
-      queue_.pop();
-      token = queue_.front().GetName();
-      if (isdigit(token[0])) stack_number_.push(queue_.front());
-      else if (token == "+") continue;
-      else if (token == "-"){
-        Token a("-", kLow, kRight, kUnaryPrefixOperator, std::negate<double>());
-        stack_token_.push(a);
-      }
-      else if (token == "(") {
-        ++i;
-        ++bracket_;
-        queue_.pop();
-        Parser();
-      }
-      else if (token == "x") PushNumberToStack(x_value_);
-      else stack_token_.push(queue_.front());
-    }
-    else if (i == 0 && token == "+") continue;
-    else if (i == 0 &&token == "-") {
-        Token a("-", kLow, kRight, kUnaryPrefixOperator, std::negate<double>());
-        stack_token_.push(a);
-    }
+  std::string token;
+  for (int i = 0; i < size; ++i){
+    if (queue_.empty()) break;
+    token = queue_.front().GetName();
+    if (isdigit(token[0])) stack_number_.push(queue_.front());
     else if (token == "x") PushNumberToStack(x_value_);
-    else if(token == ")") {
-      --bracket_;
-      if (bracket_ < 0)
-        throw std::string("скобка");
-
-        //хуита
-      if(stack_token_.top().GetName() != "("){
-        while(stack_token_.top().GetName() != "("){
-        std::cout << stack_token_.top().GetName() << std::endl;
-        Counting();
-        }
-      } else {
+    else if (token == "(") stack_token_.push(queue_.front());
+    else if (token == ")") {
+      if (stack_token_.top().GetName() == "(") {
         stack_token_.pop();
+        queue_.pop();
+        continue;
       }
-
-      }
-    
-    else if (isdigit(token[0])) stack_number_.push(queue_.front());
-    else if(stack_token_.empty()){
-      if (token == "(") ++bracket_;
-      stack_token_.push(queue_.front());
+      else while (stack_token_.top().GetName() != "(") Counting();
+      stack_token_.pop();
     }
-    else if (token != ")") Conditions();
-
+    else {
+      if(stack_token_.empty()) stack_token_.push(queue_.front());
+      else Conditions();
+    }
+    if (!queue_.empty()) queue_.pop();
   }
   while(!stack_token_.empty()) Counting();
 }

@@ -50,8 +50,6 @@ class MainWindow : public QMainWindow {
 
   void on_addAdededPartsButton_clicked();
 
-  void on_addFuncButton_valueChanged(int value);
-
   void on_AC_clicked();
 
  protected:

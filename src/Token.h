@@ -100,11 +100,13 @@ class Token {
   void CreateTokenMap(std::map<std::string, s21::Token>& temp_map);
   std::string ReadToken(std::string& input, size_t& start_index) const;
   void ConvertToLower();
+  void FindUnaries(std::string input);
   void Validator(std::string input, std::string output);
   void Parser();
   void Counting();
   void Conditions();
   void SetAnswer();
+  void CleanStacks();
   double PopFromResult();
   void PushNumberToStack(double value);
   void PushTokenToQueue(std::string input);

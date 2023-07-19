@@ -6,8 +6,11 @@
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent), ui(new Ui::MainWindow) {
   ui->setupUi(this);
-  ui->groupBox2->hide();
-  ui->groupBox->hide();
+  //  ui->groupBox2->hide();
+  //  ui->groupBox->hide();
+  ui->dockWidget->hide();
+  ui->dockWidget_2->hide();
+
   connect(ui->digit, &QButtonGroup::buttonClicked, this, &MainWindow::digit);
   connect(ui->digit2, &QButtonGroup::buttonClicked, this, &MainWindow::digit2);
   ui->XInput->setValidator(new QIntValidator(0, 100000, this));
@@ -65,23 +68,22 @@ void MainWindow::on_equal_clicked() {
 }
 
 void MainWindow::on_addAdededPartsButton_clicked() {
-  if (ui->addAdededPartsButton->isChecked())
-    ui->groupBox2->show();
-  else
-    ui->groupBox2->hide();
-}
-
-void MainWindow::on_addFuncButton_valueChanged(int value) {
-  if (value == 1)
-    ui->groupBox->show();
-  else
-    ui->groupBox->hide();
+  if (ui->addAdededPartsButton->isChecked()) {
+    ui->dockWidget->show();
+    ui->dockWidget_2->show();
+  } else {
+    ui->dockWidget->hide();
+    ui->dockWidget_2->hide();
+  }
 }
 
 void MainWindow::keyPressEvent(QKeyEvent *event) {
   if ((event->key() == Qt::Key_Enter) || (event->key() == Qt::Key_Return)) {
     on_equal_clicked();
   }
+  //  if (event->key() == Qt::Key_F1) ui->XInput->setText("sdasdsad");
+  //  if (event->key() == Qt::Key_1) ui->XInput->setText("sdasdsad");
+  //  if (event->key() == Qt::Key_2) ui->XInput->setText("sdasdsad");
 }
 
 void MainWindow::on_AC_clicked() {
