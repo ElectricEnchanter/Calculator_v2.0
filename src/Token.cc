@@ -168,7 +168,7 @@ void s21::Token::FindUnaries(std::string input) {
 void s21::Token::Parser() {
   int size = queue_.size();
   std::string token;
-  for (int i = 0; i < size; ++i) {
+  for (int i{0}; i < size; ++i) {
     if (queue_.empty()) break;
     token = queue_.front().GetName();
     if (isdigit(token[0]))

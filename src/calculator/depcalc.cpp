@@ -60,9 +60,7 @@ void DepCalc::on_equalButton_clicked() {
       ui->interRateInput->text().isEmpty() ||
       ui->periodStartInputButton->text() == "yyyy.mm.dd" ||
       ui->interRateInput->text() == "yyyy.mm.dd") {
-    //      ui->statusbar->showMessage("Данные введены не полностью");
   } else {
-    //      ui->statusbar->showMessage("");
     double depAmount = atof(ui->depAmountInput->text().toLocal8Bit());
     double interRate = atof(ui->interRateInput->text().toLocal8Bit());
 
@@ -73,7 +71,6 @@ void DepCalc::on_equalButton_clicked() {
     int payoutCount = 0;
     int y, m, d, y1, m1, d1;
     int days = 365;
-    //    int days = s21::YmdToMord(inputEnd) - s21::YmdToMord(inputStart) - 1;
     sscanf(inputStart, "%d.%d.%d", &y, &m, &d);
     sscanf(inputEnd, "%d.%d.%d", &y1, &m1, &d1);
     QVector<QString> labels;
@@ -93,7 +90,6 @@ void DepCalc::on_equalButton_clicked() {
     ui->tableWidget->setHorizontalHeaderLabels(labels);
     // Растягиваем последнюю колонку на всё доступное пространство
     ui->tableWidget->horizontalHeader()->setStretchLastSection(true);
-    //  ui->tableWidget->resizeColumnsToContents();
 
     if (!ui->capitalization->checkState()) {
       switch (ui->payFrequencyBox->currentIndex()) {

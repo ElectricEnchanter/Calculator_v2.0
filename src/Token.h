@@ -89,7 +89,6 @@ class Token {
 
   std::string input_;
   std::string input_x_;
-  int bracket_{0};
 
   static std::queue<s21::Token> queue_;
   static std::stack<s21::Token> stack_token_;

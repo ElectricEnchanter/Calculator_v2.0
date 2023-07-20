@@ -9,7 +9,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>529</width>
+    <width>544</width>
     <height>487</height>
    </rect>
   </property>
@@ -1045,6 +1045,20 @@ QPushButton:pressed {
    </layout>
   </widget>
   <widget class="QDockWidget" name="dockWidget">
+   <property name="font">
+    <font>
+     <family>PT Sans Caption</family>
+     <pointsize>14</pointsize>
+     <bold>true</bold>
+    </font>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">QDockWidget {
+	color: #FFFFFF;
+	background-color: #00796B
+}
+</string>
+   </property>
    <property name="features">
     <set>QDockWidget::DockWidgetFloatable|QDockWidget::DockWidgetMovable</set>
    </property>
@@ -1475,8 +1489,22 @@ QPushButton:pressed {
    </widget>
   </widget>
   <widget class="QDockWidget" name="dockWidget_2">
+   <property name="font">
+    <font>
+     <family>PT Sans Caption</family>
+     <pointsize>14</pointsize>
+     <bold>true</bold>
+    </font>
+   </property>
    <property name="acceptDrops">
     <bool>false</bool>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">QDockWidget {
+	color: #FFFFFF;
+	background-color: #00796B
+}
+</string>
    </property>
    <property name="features">
     <set>QDockWidget::DockWidgetFloatable|QDockWidget::DockWidgetMovable</set>

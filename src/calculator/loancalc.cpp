@@ -54,18 +54,18 @@ void LoanCalc::on_equalButton_clicked() {
     // stack bars on top of each other:
 
     // prepare x axis with country labels:
-    labels << "Март"
-           << "Апрель"
-           << "Май"
-           << "Июнь"
-           << "Июль"
-           << "Август"
+    labels << "Август"
            << "Сентябрь"
            << "Октябрь"
            << "Ноябрь"
            << "Декабрь"
            << "Январь"
-           << "Февраль";
+           << "Февраль"
+           << "Март"
+           << "Апрель"
+           << "Май"
+           << "Июнь"
+           << "Июль";
 
     for (int i = 0; i < month; i++) {
       ticks.push_back(i);  //тут вектор даблов
@@ -155,8 +155,6 @@ void LoanCalc::on_equalButton_clicked() {
 
     // setup legend:
     ui->widget->legend->setVisible(true);
-    //  ui->widget->axisRect()->insetLayout()->setInsetAlignment(
-    //      0, Qt::AlignTop | Qt::AlignHCenter);
     ui->widget->legend->setBrush(QColor(255, 255, 255, 100));
     ui->widget->legend->setBorderPen(Qt::NoPen);
     QFont legendFont = font();
