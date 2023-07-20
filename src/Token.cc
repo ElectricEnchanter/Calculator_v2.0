@@ -14,7 +14,6 @@ s21::Token::Token(const std::string& name, Priority priority,
       type_(type),
       function_(function){};
 
-
 std::string s21::Token::GetName() const { return name_; }
 
 s21::Priority s21::Token::GetPriority() const { return priority_; }
@@ -40,7 +39,7 @@ void s21::Token::CalculateAnswer(std::string input, std::string input_x) {
   CleanStacks();
 }
 
-void s21::Token::CleanStacks(){
+void s21::Token::CleanStacks() {
   while (!queue_.empty()) queue_.pop();
   while (!stack_token_.empty()) stack_token_.pop();
   while (!stack_number_.empty()) stack_number_.pop();
@@ -61,7 +60,8 @@ void s21::Token::CreateTokenMap(std::map<std::string, s21::Token>& token_map) {
       {"x", Token("x", kDefault, kNone, kNumber, nullptr)},
       {"(", Token("(", kDefault, kNone, kOpenBracket, nullptr)},
       {")", Token(")", kDefault, kNone, kCloseBracket, nullptr)},
-      {"/", Token("/", kMedium, kLeft, kBinaryOperator, std::divides<double>())},
+      {"/",
+       Token("/", kMedium, kLeft, kBinaryOperator, std::divides<double>())},
       {"^", Token("^", kHigh, kRight, kBinaryOperator, powl)},
       {"cos", Token("cos", kFunction, kRight, kUnaryFunction, cosl)},
       {"sin", Token("sin", kFunction, kRight, kUnaryFunction, sinl)},
@@ -72,18 +72,20 @@ void s21::Token::CreateTokenMap(std::map<std::string, s21::Token>& token_map) {
       {"sqrt", Token("sqrt", kFunction, kRight, kUnaryFunction, sqrtl)},
       {"ln", Token("ln", kFunction, kRight, kUnaryFunction, logl)},
       {"log", Token("log", kFunction, kRight, kUnaryFunction, log10l)},
-      {"neg", Token("-", kLow, kRight, kUnaryPrefixOperator, std::negate<double>())},
+      {"neg",
+       Token("-", kLow, kRight, kUnaryPrefixOperator, std::negate<double>())},
   };
   token_map.insert(list);
 }
 
 std::string s21::Token::ReadToken(std::string& input, size_t& index) const {
   std::regex pattern;
-  if (isdigit(input.at(index))) 
+  if (isdigit(input.at(index)))
     pattern = ("\\d+([.]\\d+)?(e([-+])?\\d+)?");
-  else if (isalpha(input.at(index))) 
+  else if (isalpha(input.at(index)))
     pattern = "([%cosintaqrtlgx]+)";
-  else pattern = "([-( )^%*+\\/])";
+  else
+    pattern = "([-( )^%*+\\/])";
 
   std::sregex_iterator regex_iterator =
       std::sregex_iterator(input.begin() + index, input.end(), pattern);
@@ -97,122 +99,130 @@ void s21::Token::ConvertToLower() {
 }
 
 void s21::Token::Validator(std::string input, std::string input_x) {
-  if(!input_x.empty()) x_value_ = stod(input_x);
+  if (!input_x.empty()) x_value_ = stod(input_x);
 
   std::cmatch result;
   std::regex pattern;
-  int i {0};
-  
-  while(i < 4){
-    switch(i){
-      case 0: pattern = "[^-/ %.cosintaqrtlgx()^/*+0-9]";
+  int i{0};
+
+  while (i < 4) {
+    switch (i) {
+      case 0:
+        pattern = "[^-/ %.cosintaqrtlgx()^/*+0-9]";
         break;
-      case 1: pattern = ".*\\. \\d.*";
+      case 1:
+        pattern = ".*\\. \\d.*";
         break;
-      case 2: pattern = "(\\b\\d+\\.\\d+\\.\\d+\\b)";
+      case 2:
+        pattern = "(\\b\\d+\\.\\d+\\.\\d+\\b)";
         break;
-      case 3: pattern = "((\\d+(?:\\.\\d+)?)[+\\-*/^%]{2,}(\\d+(?:\\.\\d+)?))";
+      case 3:
+        pattern = "((\\d+(?:\\.\\d+)?)[+\\-*/^%]{2,}(\\d+(?:\\.\\d+)?))";
         break;
     }
     if (std::regex_search(input.c_str(), result, pattern))
-    throw std::string("INVALID CHARACTER(S)");
+      throw std::string("INVALID CHARACTER(S)");
     ++i;
   }
 }
 
-void s21::Token::FindUnaries(std::string input){
+void s21::Token::FindUnaries(std::string input) {
   for (size_t index = 0; input.length() > index; ++index) {
-    try{
-      if (input.at(index) == '.')
-      throw std::string("INVALID CHARACTER(S)");
+    try {
+      if (input.at(index) == '.') throw std::string("INVALID CHARACTER(S)");
       std::string token = ReadToken(input, index);
-      if (isdigit(token.at(0))){
+      if (isdigit(token.at(0))) {
         Token result(token, kDefault, kNone, kNumber, stod(token));
         queue_.push(result);
-      }
-      else if (token == " ") continue;
-      else if (index == 0){
-        if (token == "+") continue;
-        else if(token == "-") {
-          Token a("-", kLow, kRight, kUnaryPrefixOperator, std::negate<double>());
+      } else if (token == " ")
+        continue;
+      else if (index == 0) {
+        if (token == "+")
+          continue;
+        else if (token == "-") {
+          Token a("-", kLow, kRight, kUnaryPrefixOperator,
+                  std::negate<double>());
           queue_.push(a);
         }
-      }
-      else if (token == "("){
+      } else if (token == "(") {
         PushTokenToQueue(token);
         token = ReadToken(input, ++index);
-        if (token == "+") continue;
-        else if(token == "-") {
-          Token a("-", kLow, kRight, kUnaryPrefixOperator, std::negate<double>());
+        if (token == "+")
+          continue;
+        else if (token == "-") {
+          Token a("-", kLow, kRight, kUnaryPrefixOperator,
+                  std::negate<double>());
           queue_.push(a);
-        }
-        else if (isdigit(token.at(0))){
+        } else if (isdigit(token.at(0))) {
           Token result(token, kDefault, kNone, kNumber, stod(token));
           queue_.push(result);
-        }
-        else PushTokenToQueue(token);
-      }
-      else PushTokenToQueue(token);
-    } catch (std::string error_message){}
+        } else
+          PushTokenToQueue(token);
+      } else
+        PushTokenToQueue(token);
+    } catch (std::string error_message) {
+    }
   }
 }
 
-void s21::Token::Parser(){
+void s21::Token::Parser() {
   int size = queue_.size();
   std::string token;
-  for (int i = 0; i < size; ++i){
+  for (int i = 0; i < size; ++i) {
     if (queue_.empty()) break;
     token = queue_.front().GetName();
-    if (isdigit(token[0])) stack_number_.push(queue_.front());
-    else if (token == "x") PushNumberToStack(x_value_);
-    else if (token == "(") stack_token_.push(queue_.front());
+    if (isdigit(token[0]))
+      stack_number_.push(queue_.front());
+    else if (token == "x")
+      PushNumberToStack(x_value_);
+    else if (token == "(")
+      stack_token_.push(queue_.front());
     else if (token == ")") {
       if (stack_token_.top().GetName() == "(") {
         stack_token_.pop();
         queue_.pop();
         continue;
-      }
-      else while (stack_token_.top().GetName() != "(") Counting();
+      } else
+        while (stack_token_.top().GetName() != "(") Counting();
       stack_token_.pop();
-    }
-    else {
-      if(stack_token_.empty()) stack_token_.push(queue_.front());
-      else Conditions();
+    } else {
+      if (stack_token_.empty())
+        stack_token_.push(queue_.front());
+      else
+        Conditions();
     }
     if (!queue_.empty()) queue_.pop();
   }
-  while(!stack_token_.empty()) Counting();
+  while (!stack_token_.empty()) Counting();
 }
 
 void s21::Token::Counting() {
   std::visit(
-      overloaded{
-        [&](unary_function function) {
-          PushNumberToStack(function(PopFromResult()));
-        },
+      overloaded{[&](unary_function function) {
+                   PushNumberToStack(function(PopFromResult()));
+                 },
 
-        [&](binary_function function) {
-          double right_argument = PopFromResult();
-          double left_argument = PopFromResult();
-          PushNumberToStack(function(left_argument, right_argument));
-        },
+                 [&](binary_function function) {
+                   double right_argument = PopFromResult();
+                   double left_argument = PopFromResult();
+                   PushNumberToStack(function(left_argument, right_argument));
+                 },
 
-        [&](auto) {}
-        },
+                 [&](auto) {}},
 
-      stack_token_.top().GetFunction()
-      );
-      stack_token_.pop();
+      stack_token_.top().GetFunction());
+  stack_token_.pop();
 }
 
-void s21::Token::Conditions(){
+void s21::Token::Conditions() {
   int lastToken = stack_token_.top().GetPriority();
   int currentToken = queue_.front().GetPriority();
 
-  if (lastToken > currentToken || lastToken == currentToken ){
+  if (lastToken > currentToken || lastToken == currentToken) {
     Counting();
     stack_token_.push(queue_.front());
-  } else stack_token_.push(queue_.front());
+  } else
+    stack_token_.push(queue_.front());
 }
 
 void s21::Token::SetAnswer() {
@@ -221,8 +231,7 @@ void s21::Token::SetAnswer() {
 }
 
 double s21::Token::PopFromResult() {
-  if(stack_number_.empty())
-   throw std::string("NOT ENOUGH NUMBERS");
+  if (stack_number_.empty()) throw std::string("NOT ENOUGH NUMBERS");
 
   s21::Token number = stack_number_.top();
   std::string name = number.GetName();
@@ -238,8 +247,7 @@ void s21::Token::PushNumberToStack(double value) {
   stack_number_.push(result);
 }
 
-
-void s21::Token::PushTokenToQueue(std::string input){
+void s21::Token::PushTokenToQueue(std::string input) {
   auto found_token = token_map_.find(input);
   if (found_token == token_map_.end())
     throw std::string("INVALID CHARACTER(S)");

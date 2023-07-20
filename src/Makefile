@@ -12,41 +12,39 @@ else
 endif
 
 
-all: pognal
+all: install run
 
-pognal:
-	$(CC) $(FLAGS) Token.cc && ./a.out
-
-run: install
-	build/Calculator.app/Contents/MacOS/Calculator
+run:
+	build/SmartCalc_v2.app/Contents/MacOS/SmartCalc_v2
 
 gcov_report: test
-
 	lcov --no-external --capture --directory  . --output-file coverage.info
 	genhtml -o  report coverage.info
 	open ./report/index.html
 
 style:
 	cp ../assets/.clang-format .
-	clang-format -i *.c
-	clang-format -n *.c
+	clang-format -i *.cc
+	clang-format -n *.cc
 	rm .clang-format
 
 test: clean
 	$(CC) $(FLAGS) Token.cc calculator_tests.cc $(LIBS) && ./a.out
 
+leaks: test
+	$(CHECK_LEAKS) ./a.out
 
 install: uninstall
 	mkdir -p build
-	cd build; cmake ../; make
-	mkdir -p ~/Applications ; cp -r build/output/amd64/third_party/SmartCalc.app ~/Applications/Calculator.app
+	cd build; qmake6 ../calculator/SmartCalc_v2.pro; make > /dev/null 2>&1
+	mkdir -p ~/Applications ; cp -r build/SmartCalc_v2.app ~/Applications/SmartCalc_v2.app
 	
 uninstall: clean
 	rm -rf build
-	rm -rf ~/Applications/Calculator.app
+	rm -rf ~/Applications/SmartCalc_v2.app
 
 dist:
-	cd .. && tar -czvf SmartCalc_v1.0.tar src
+	cd .. && tar -czvf SmartCalc_v2.0.tar src
 
 dvi:
 	open dvi.html
