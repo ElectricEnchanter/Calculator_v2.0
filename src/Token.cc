@@ -136,7 +136,7 @@ void s21::Token::FindUnaries(std::string input) {
         queue_.push(result);
       } else if (token == " ")
         continue;
-      else if (index == 0) {
+      else if (index == 0 && (token == "+" || token == "-")) {
         if (token == "+")
           continue;
         else if (token == "-") {

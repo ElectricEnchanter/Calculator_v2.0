@@ -24,8 +24,8 @@ gcov_report: test
 
 style:
 	cp ../assets/.clang-format .
-	clang-format -i *.cc
-	clang-format -n *.cc
+	clang-format -i *.cc *.h
+# clang-format -n *.cc
 	rm .clang-format
 
 test: clean

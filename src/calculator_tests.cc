@@ -337,6 +337,14 @@ TEST(EqualRes, test43) {
   EXPECT_EQ(w.GetAnswer(), 0.720342);
 }
 
+TEST(EqualRes, test44) {
+  s21::Token w;
+  std::string a = "(8-3)";
+  std::string b = "";
+  w.CalculateAnswer(a, b);
+  EXPECT_EQ(w.GetAnswer(), 5);
+}
+
 TEST(Fall, test1) {
   s21::Token w;
   std::string a = "adasdsa";

@@ -6,8 +6,6 @@
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent), ui(new Ui::MainWindow) {
   ui->setupUi(this);
-  //  ui->groupBox2->hide();
-  //  ui->groupBox->hide();
   ui->dockWidget->hide();
   ui->dockWidget_2->hide();
 
@@ -61,7 +59,10 @@ void MainWindow::on_equal_clicked() {
 
   try {
     view.CalculateAnswer(input, input_x);
-    ui->input->setText(QString::number(view.GetAnswer()));
+    if (fmod(view.GetAnswer(), 1) == 0)
+      ui->input->setText(QString::number(view.GetAnswer(), 'f', 0));
+    else
+      ui->input->setText(QString::number(view.GetAnswer(), 'f', 7));
   } catch (std::string error_message) {
     ui->input->setText(QString::fromStdString(error_message));
   }
@@ -81,9 +82,6 @@ void MainWindow::keyPressEvent(QKeyEvent *event) {
   if ((event->key() == Qt::Key_Enter) || (event->key() == Qt::Key_Return)) {
     on_equal_clicked();
   }
-  //  if (event->key() == Qt::Key_F1) ui->XInput->setText("sdasdsad");
-  //  if (event->key() == Qt::Key_1) ui->XInput->setText("sdasdsad");
-  //  if (event->key() == Qt::Key_2) ui->XInput->setText("sdasdsad");
 }
 
 void MainWindow::on_AC_clicked() {

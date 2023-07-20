@@ -8,11 +8,10 @@
 #include <map>
 #include <queue>
 #include <regex>
+#include <sstream>
 #include <stack>
 #include <variant>
 #include <vector>
-#include <sstream>
-
 
 namespace s21 {
 
@@ -63,10 +62,10 @@ overloaded(Ts...) -> overloaded<Ts...>;
 class Token {
  public:
   Token() = default;
-  Token(const std::string& name, Priority priority,
-        Associativity associativity, Type type, function_variant function);
+  Token(const std::string& name, Priority priority, Associativity associativity,
+        Type type, function_variant function);
   Token(const Token&) = default;
-  Token(const Token&& ) = delete;
+  Token(const Token&&) = delete;
   ~Token() = default;
 
   std::string GetName() const;
@@ -78,7 +77,7 @@ class Token {
   double GetAnswer();
   void CalculateAnswer(std::string input, std::string input_x);
 
-  private:
+ private:
   std::string name_;
   Priority priority_;
   Associativity associativity_;
@@ -90,9 +89,9 @@ class Token {
 
   std::string input_;
   std::string input_x_;
-  int bracket_ {0};
+  int bracket_{0};
 
-  static  std::queue<s21::Token> queue_;
+  static std::queue<s21::Token> queue_;
   static std::stack<s21::Token> stack_token_;
   static std::stack<s21::Token> stack_number_;
   std::map<std::string, Token> token_map_;
@@ -117,4 +116,3 @@ int YmdToMord(const char* date);
 };  // namespace s21
 
 #endif  // TOKEN_H_
-
