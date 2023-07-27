@@ -83,7 +83,7 @@ std::string s21::Token::ReadToken(std::string& input, size_t& index) const {
   if (isdigit(input.at(index)))
     pattern = ("\\d+([.]\\d+)?(e([-+])?\\d+)?");
   else if (isalpha(input.at(index)))
-    pattern = "([%cosintaqrtlgx]+)";
+    pattern = "([%ecosintaqrtlgx]+)";
   else
     pattern = "([-( )^%*+\\/])";
 

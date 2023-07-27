@@ -1,12 +1,13 @@
 CC=g++
 FLAGS=-std=gnu++17 -Wall -Wextra -Werror
-FLAGS_GCOV =-fprofile-arcs --coverage
 
 OS=$(shell uname)
 ifeq ($(OS), Linux)
   LIBS=--coverage -lgtest -lpthread 
   CHECK_LEAKS=valgrind --leak-check=full --show-reachable=yes --show-leak-kinds=all --track-origins=yes --log-file=log.txt
 else
+  APPPLACE=~/Applications
+  APPNAME=SmartCalc_v2.app
   LIBS=--coverage -lgtest
   CHECK_LEAKS= leaks -atExit -- 
 endif
@@ -15,7 +16,9 @@ endif
 all: install run
 
 run:
-	build/SmartCalc_v2.app/Contents/MacOS/SmartCalc_v2
+ifeq ($(OS), Darwin)
+	@../build/SmartCalc_v2.app/Contents/MacOS/SmartCalc_v2
+endif
 
 gcov_report: test
 	lcov --no-external --capture --directory  . --output-file coverage.info
@@ -24,8 +27,9 @@ gcov_report: test
 
 style:
 	cp ../assets/.clang-format .
-	clang-format -i *.cc *.h
-# clang-format -n *.cc
+	clang-format -n *.cc *.h
+	cd calculator
+	clang-format -n *.cc *.h 
 	rm .clang-format
 
 test: clean
@@ -35,19 +39,24 @@ leaks: test
 	$(CHECK_LEAKS) ./a.out
 
 install: uninstall
-	mkdir -p build
-	cd build; qmake6 ../calculator/SmartCalc_v2.pro; make > /dev/null 2>&1
-	mkdir -p ~/Applications ; cp -r build/SmartCalc_v2.app ~/Applications/SmartCalc_v2.app
-	
+	@mkdir -p ../build
+	@qmake6 -o ../build/Makefile ./calculator/SmartCalc_v2.pro
+	@make -C ../build > /dev/null 2>&1;
+
+ifeq ($(OS), Linux)
+	echo 'dsa'
+else
+	@mkdir -p ~/Applications ; cp -r ./../build/SmartCalc_v2.app ~/Applications/SmartCalc_v2.app
+endif
+
 uninstall: clean
-	rm -rf build
-	rm -rf ~/Applications/SmartCalc_v2.app
+	@rm -rf ~/Applications/SmartCalc_v2.app
 
 dist:
-	cd .. && tar -czvf SmartCalc_v2.0.tar src
+	@cd .. && tar -czvf SmartCalc_v2.0.tar src
 
 dvi:
-	open dvi.html
+	@open dvi.html
 
 clean:
-	rm -rf build* ../.vscode a.out *.gcno *.gcda *.info coverage_report Token.dSYM Token report
+	@rm -rf ../build ../.vscode a.out *.gcno *.gcda *.info coverage_report Token.dSYM Token report
