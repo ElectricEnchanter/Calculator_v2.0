@@ -28,7 +28,7 @@ void Graph::on_erase_clicked() {
 void Graph::on_buildButton_clicked() {
   std::string input = ui->inputLine->text().toStdString();
   std::string input_x = ui->inputXLine->text().toStdString();
-  s21::Token view;
+  s21::Calculator view;
   double Dot = stod(input_x);
   ui->widget->xAxis->setRange(-Dot, Dot);
   ui->widget->yAxis->setRange(-Dot, Dot);
@@ -36,7 +36,6 @@ void Graph::on_buildButton_clicked() {
   x.clear();
   y.clear();
 
-  //  char output[255] = {""};
   std::string x_value = std::to_string(X);
   try {
     for (X = -Dot; X <= fabs(Dot); X += h) {
@@ -52,7 +51,6 @@ void Graph::on_buildButton_clicked() {
     ui->widget->graph(0)->addData(x, y);
     ui->widget->replot();
 
-    //    ui->input->setText(QString::number(view.GetAnswer()));
   } catch (std::string error_message) {
     ui->inputLine->setText(QString::fromStdString(error_message));
   }

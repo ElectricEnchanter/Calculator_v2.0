@@ -1,9 +1,6 @@
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 
-#include <math.h>
-#include <stdio.h>
-
 #include <QAbstractButton>
 #include <QButtonGroup>
 #include <QKeyEvent>
@@ -13,11 +10,10 @@
 #include <QVariantList>
 #include <QVector>
 
+#include "../back/Controller.h"
 #include "depcalc.h"
 #include "graph.h"
 #include "loancalc.h"
-
-#include "../back/Token.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui {
@@ -28,11 +24,11 @@ QT_END_NAMESPACE
 class MainWindow : public QMainWindow {
   Q_OBJECT
 
-public:
-  MainWindow(QWidget *parent = nullptr);
+ public:
+  MainWindow(QWidget *parent, s21::Controller &controller);
   ~MainWindow();
 
-private slots:
+ private slots:
 
   void digit(QAbstractButton *btm);
 
@@ -50,13 +46,14 @@ private slots:
 
   void on_AC_clicked();
 
-protected:
+ protected:
   void keyPressEvent(QKeyEvent *event);
 
-private:
+ private:
   Ui::MainWindow *ui;
   Graph graph;
   LoanCalc loancalc;
   DepCalc depcalc;
+  s21::Controller *controller_;
 };
-#endif // MAINWINDOW_H
+#endif  // MAINWINDOW_H

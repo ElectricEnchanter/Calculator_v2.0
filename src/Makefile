@@ -18,8 +18,8 @@ ifeq ($(OS), Darwin)
 endif
 
 gcov_report: test
-	lcov --no-external --capture --directory  . --output-file coverage.info
-	genhtml -o  report coverage.info
+	@lcov --no-external --capture --directory  . --output-file coverage.info
+	@genhtml -o  report coverage.info
 	open ./report/index.html
 
 style:
@@ -35,7 +35,7 @@ leaks: test
 install: uninstall
 	@mkdir -p ../build
 	@qmake6 -o ../build/Makefile ./front/SmartCalc_v2.pro
-	@make -C ../build 
+	@make -C ../build > /dev/null 2>&1
 
 ifneq ($(OS), Linux)
 	@mkdir -p ~/Applications ; cp -r ./../build/SmartCalc_v2.app ~/Applications/SmartCalc_v2.app

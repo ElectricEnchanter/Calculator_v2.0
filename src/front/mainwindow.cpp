@@ -3,8 +3,8 @@
 #include "QDebug"
 #include "ui_mainwindow.h"
 
-MainWindow::MainWindow(QWidget *parent)
-    : QMainWindow(parent), ui(new Ui::MainWindow) {
+MainWindow::MainWindow(QWidget *parent, s21::Controller &controller)
+    : QMainWindow(parent), ui(new Ui::MainWindow), controller_(&controller) {
   ui->setupUi(this);
   ui->dockWidget->hide();
   ui->dockWidget_2->hide();
@@ -55,17 +55,9 @@ void MainWindow::on_Deposit_clicked() {
 void MainWindow::on_equal_clicked() {
   std::string input = ui->input->text().toStdString();
   std::string input_x = ui->XInput->text().toStdString();
-  s21::Token view;
 
-  try {
-    view.CalculateAnswer(input, input_x);
-    if (fmod(view.GetAnswer(), 1) == 0)
-      ui->input->setText(QString::number(view.GetAnswer(), 'f', 0));
-    else
-      ui->input->setText(QString::number(view.GetAnswer(), 'f', 7));
-  } catch (std::string error_message) {
-    ui->input->setText(QString::fromStdString(error_message));
-  }
+  std::string result = controller_->Calculate(input, input_x);
+  ui->input->setText(QString::fromStdString(result));
 }
 
 void MainWindow::on_addAdededPartsButton_clicked() {

@@ -10,6 +10,7 @@ CONFIG += c++17
 
 SOURCES += \
     ../back/Token.cc \
+    ../back/Calculator.cc \
     depcalc.cpp \
     graph.cpp \
     loancalc.cpp \
@@ -22,7 +23,6 @@ HEADERS += \
     graph.h \
     loancalc.h \
     mainwindow.h \
-    ../back/Token.h \
     qcustomplot.h
 
 FORMS += \
