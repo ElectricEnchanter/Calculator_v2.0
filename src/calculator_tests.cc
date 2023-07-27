@@ -1,9 +1,9 @@
 #include <gtest/gtest.h>
 
-#include "Token.h"
+#include "./back/Calculator.h"
 
 TEST(EqualRes, test1) {
-  s21::Token w;
+  s21::Calculator w;
   std::string a = "2+2";
   std::string b = "";
   w.CalculateAnswer(a, b);
@@ -11,7 +11,7 @@ TEST(EqualRes, test1) {
 }
 
 TEST(EqualRes, test2) {
-  s21::Token w;
+  s21::Calculator w;
   std::string a = "22-30";
   std::string b = "";
   w.CalculateAnswer(a, b);
@@ -19,7 +19,7 @@ TEST(EqualRes, test2) {
 }
 
 TEST(EqualRes, test3) {
-  s21::Token w;
+  s21::Calculator w;
   std::string a = "-2+3";
   std::string b = "";
   w.CalculateAnswer(a, b);
@@ -27,7 +27,7 @@ TEST(EqualRes, test3) {
 }
 
 TEST(EqualRes, test4) {
-  s21::Token w;
+  s21::Calculator w;
   std::string a = "+5-5";
   std::string b = "";
   w.CalculateAnswer(a, b);
@@ -35,7 +35,7 @@ TEST(EqualRes, test4) {
 }
 
 TEST(EqualRes, test5) {
-  s21::Token w;
+  s21::Calculator w;
   std::string a = "cos(2)+2";
   std::string b = "";
   w.CalculateAnswer(a, b);
@@ -43,7 +43,7 @@ TEST(EqualRes, test5) {
 }
 
 TEST(EqualRes, test6) {
-  s21::Token w;
+  s21::Calculator w;
   std::string a = "cos(2)";
   std::string b = "";
   w.CalculateAnswer(a, b);
@@ -51,7 +51,7 @@ TEST(EqualRes, test6) {
 }
 
 TEST(EqualRes, test7) {
-  s21::Token w;
+  s21::Calculator w;
   std::string a = "cos(2)+2";
   std::string b = "";
   w.CalculateAnswer(a, b);
@@ -59,7 +59,7 @@ TEST(EqualRes, test7) {
 }
 
 TEST(EqualRes, test8) {
-  s21::Token w;
+  s21::Calculator w;
   std::string a = "cos(2+3)+4-5";
   std::string b = "";
   w.CalculateAnswer(a, b);
@@ -67,7 +67,7 @@ TEST(EqualRes, test8) {
 }
 
 TEST(EqualRes, test9) {
-  s21::Token w;
+  s21::Calculator w;
   std::string a = "cos(2+3)+4-x";
   std::string b = "5";
   w.CalculateAnswer(a, b);
@@ -75,7 +75,7 @@ TEST(EqualRes, test9) {
 }
 
 TEST(EqualRes, test10) {
-  s21::Token w;
+  s21::Calculator w;
   std::string a = "cos(x)";
   std::string b = "5";
   w.CalculateAnswer(a, b);
@@ -83,7 +83,7 @@ TEST(EqualRes, test10) {
 }
 
 TEST(EqualRes, test11) {
-  s21::Token w;
+  s21::Calculator w;
   std::string a = "-2+x";
   std::string b = "5";
   w.CalculateAnswer(a, b);
@@ -91,7 +91,7 @@ TEST(EqualRes, test11) {
 }
 
 TEST(EqualRes, test12) {
-  s21::Token w;
+  s21::Calculator w;
   std::string a = "sin(sin(x))";
   std::string b = "2";
   w.CalculateAnswer(a, b);
@@ -99,7 +99,7 @@ TEST(EqualRes, test12) {
 }
 
 TEST(EqualRes, test13) {
-  s21::Token w;
+  s21::Calculator w;
   std::string a = "sin(sin(sin(x)))";
   std::string b = "2";
   w.CalculateAnswer(a, b);
@@ -107,7 +107,7 @@ TEST(EqualRes, test13) {
 }
 
 TEST(EqualRes, test14) {
-  s21::Token w;
+  s21::Calculator w;
   std::string a = "10 * 30";
   std::string b = "";
   w.CalculateAnswer(a, b);
@@ -115,7 +115,7 @@ TEST(EqualRes, test14) {
 }
 
 TEST(EqualRes, test15) {
-  s21::Token w;
+  s21::Calculator w;
   std::string a = "+5+5";
   std::string b = "";
   w.CalculateAnswer(a, b);
@@ -123,7 +123,7 @@ TEST(EqualRes, test15) {
 }
 
 TEST(EqualRes, test16) {
-  s21::Token w;
+  s21::Calculator w;
   std::string a = "+5+(-3)";
   std::string b = "";
   w.CalculateAnswer(a, b);
@@ -131,7 +131,7 @@ TEST(EqualRes, test16) {
 }
 
 TEST(EqualRes, test17) {
-  s21::Token w;
+  s21::Calculator w;
   std::string a = "5+(-3)";
   std::string b = "";
   w.CalculateAnswer(a, b);
@@ -139,7 +139,7 @@ TEST(EqualRes, test17) {
 }
 
 TEST(EqualRes, test18) {
-  s21::Token w;
+  s21::Calculator w;
   std::string a = "5+(+3)";
   std::string b = "";
   w.CalculateAnswer(a, b);
@@ -147,7 +147,7 @@ TEST(EqualRes, test18) {
 }
 
 TEST(EqualRes, test19) {
-  s21::Token w;
+  s21::Calculator w;
   std::string a = "+5+(+3)";
   std::string b = "";
   w.CalculateAnswer(a, b);
@@ -155,7 +155,7 @@ TEST(EqualRes, test19) {
 }
 
 TEST(EqualRes, test20) {
-  s21::Token w;
+  s21::Calculator w;
   std::string a = "-10-30";
   std::string b = "";
   w.CalculateAnswer(a, b);
@@ -163,7 +163,7 @@ TEST(EqualRes, test20) {
 }
 
 TEST(EqualRes, test21) {
-  s21::Token w;
+  s21::Calculator w;
   std::string a = "2^2^2";
   std::string b = "";
   w.CalculateAnswer(a, b);
@@ -178,7 +178,7 @@ TEST(EqualRes, test22) {
 }
 
 TEST(EqualRes, test23) {
-  s21::Token w;
+  s21::Calculator w;
   std::string a = "sqrt(9)";
   std::string b = "";
   w.CalculateAnswer(a, b);
@@ -186,7 +186,7 @@ TEST(EqualRes, test23) {
 }
 
 TEST(EqualRes, test24) {
-  s21::Token w;
+  s21::Calculator w;
   std::string a = "3.4+sin(3.55)";
   std::string b = "";
   w.CalculateAnswer(a, b);
@@ -194,7 +194,7 @@ TEST(EqualRes, test24) {
 }
 
 TEST(EqualRes, test25) {
-  s21::Token w;
+  s21::Calculator w;
   std::string a = "9%2";
   std::string b = "";
   w.CalculateAnswer(a, b);
@@ -202,7 +202,7 @@ TEST(EqualRes, test25) {
 }
 
 TEST(EqualRes, test26) {
-  s21::Token w;
+  s21::Calculator w;
   std::string a = "sin(1)*2";
   std::string b = "";
   w.CalculateAnswer(a, b);
@@ -210,7 +210,7 @@ TEST(EqualRes, test26) {
 }
 
 TEST(EqualRes, test27) {
-  s21::Token w;
+  s21::Calculator w;
   std::string a = "2*4+1";
   std::string b = "";
   w.CalculateAnswer(a, b);
@@ -218,7 +218,7 @@ TEST(EqualRes, test27) {
 }
 
 TEST(EqualRes, test29) {
-  s21::Token w;
+  s21::Calculator w;
   std::string a = "4^3-2+2";
   std::string b = "";
   w.CalculateAnswer(a, b);
@@ -226,7 +226,7 @@ TEST(EqualRes, test29) {
 }
 
 TEST(EqualRes, test30) {
-  s21::Token w;
+  s21::Calculator w;
   std::string a = "1.53232+cos((1))";
   std::string b = "";
   w.CalculateAnswer(a, b);
@@ -234,7 +234,7 @@ TEST(EqualRes, test30) {
 }
 
 TEST(EqualRes, test31) {
-  s21::Token w;
+  s21::Calculator w;
   std::string a = "1.532327+cos((1))";
   std::string b = "";
   w.CalculateAnswer(a, b);
@@ -242,7 +242,7 @@ TEST(EqualRes, test31) {
 }
 
 TEST(EqualRes, test32) {
-  s21::Token w;
+  s21::Calculator w;
   std::string a = "1.53232/tan(1.5)";
   std::string b = "";
   w.CalculateAnswer(a, b);
@@ -250,7 +250,7 @@ TEST(EqualRes, test32) {
 }
 
 TEST(EqualRes, test33) {
-  s21::Token w;
+  s21::Calculator w;
   std::string a = "atan(34)^3";
   std::string b = "";
   w.CalculateAnswer(a, b);
@@ -258,7 +258,7 @@ TEST(EqualRes, test33) {
 }
 
 TEST(EqualRes, test34) {
-  s21::Token w;
+  s21::Calculator w;
   std::string a = "sqrt(36)-16";
   std::string b = "";
   w.CalculateAnswer(a, b);
@@ -266,7 +266,7 @@ TEST(EqualRes, test34) {
 }
 
 TEST(EqualRes, test35) {
-  s21::Token w;
+  s21::Calculator w;
   std::string a = "acos(0.5)/6";
   std::string b = "";
   w.CalculateAnswer(a, b);
@@ -274,7 +274,7 @@ TEST(EqualRes, test35) {
 }
 
 TEST(EqualRes, test36) {
-  s21::Token w;
+  s21::Calculator w;
   std::string a = "6/acos(0.5)";
   std::string b = "";
   w.CalculateAnswer(a, b);
@@ -282,7 +282,7 @@ TEST(EqualRes, test36) {
 }
 
 TEST(EqualRes, test37) {
-  s21::Token w;
+  s21::Calculator w;
   std::string a = "log(4)/50*3";
   std::string b = "";
   w.CalculateAnswer(a, b);
@@ -290,7 +290,7 @@ TEST(EqualRes, test37) {
 }
 
 TEST(EqualRes, test38) {
-  s21::Token w;
+  s21::Calculator w;
   std::string a = "3*5^3";
   std::string b = "";
   w.CalculateAnswer(a, b);
@@ -298,7 +298,7 @@ TEST(EqualRes, test38) {
 }
 
 TEST(EqualRes, test39) {
-  s21::Token w;
+  s21::Calculator w;
   std::string a = "5^3*3";
   std::string b = "";
   w.CalculateAnswer(a, b);
@@ -306,7 +306,7 @@ TEST(EqualRes, test39) {
 }
 
 TEST(EqualRes, test40) {
-  s21::Token w;
+  s21::Calculator w;
   std::string a = "5-3*3";
   std::string b = "";
   w.CalculateAnswer(a, b);
@@ -314,7 +314,7 @@ TEST(EqualRes, test40) {
 }
 
 TEST(EqualRes, test41) {
-  s21::Token w;
+  s21::Calculator w;
   std::string a = "8^3-(2+6*8)";
   std::string b = "";
   w.CalculateAnswer(a, b);
@@ -322,7 +322,7 @@ TEST(EqualRes, test41) {
 }
 
 TEST(EqualRes, test42) {
-  s21::Token w;
+  s21::Calculator w;
   std::string a = "8^3-(2+log(37))";
   std::string b = "";
   w.CalculateAnswer(a, b);
@@ -330,7 +330,7 @@ TEST(EqualRes, test42) {
 }
 
 TEST(EqualRes, test43) {
-  s21::Token w;
+  s21::Calculator w;
   std::string a = "cos(4)*sin((sin(4)))*tan(4)*ln(4)*log(10)";
   std::string b = "";
   w.CalculateAnswer(a, b);
@@ -338,7 +338,7 @@ TEST(EqualRes, test43) {
 }
 
 TEST(EqualRes, test44) {
-  s21::Token w;
+  s21::Calculator w;
   std::string a = "(8-3)";
   std::string b = "";
   w.CalculateAnswer(a, b);
@@ -346,140 +346,140 @@ TEST(EqualRes, test44) {
 }
 
 TEST(Fall, test1) {
-  s21::Token w;
+  s21::Calculator w;
   std::string a = "adasdsa";
   std::string b = "";
   EXPECT_ANY_THROW(w.CalculateAnswer(a, b));
 }
 
 TEST(Fall, test2) {
-  s21::Token w;
+  s21::Calculator w;
   std::string a = "sin(sin(sin()))";
   std::string b = "";
   EXPECT_ANY_THROW(w.CalculateAnswer(a, b));
 }
 
 TEST(Fall, test3) {
-  s21::Token w;
+  s21::Calculator w;
   std::string a = "++++";
   std::string b = "";
   EXPECT_ANY_THROW(w.CalculateAnswer(a, b));
 }
 
 TEST(Fall, test4) {
-  s21::Token w;
+  s21::Calculator w;
   std::string a = "-----";
   std::string b = "";
   EXPECT_ANY_THROW(w.CalculateAnswer(a, b));
 }
 
 TEST(Fall, test5) {
-  s21::Token w;
+  s21::Calculator w;
   std::string a = "8(9)";
   std::string b = "";
   EXPECT_ANY_THROW(w.CalculateAnswer(a, b));
 }
 
 TEST(Fall, test6) {
-  s21::Token w;
+  s21::Calculator w;
   std::string a = "8+9-";
   std::string b = "";
   EXPECT_ANY_THROW(w.CalculateAnswer(a, b));
 }
 
 TEST(Fall, test7) {
-  s21::Token w;
+  s21::Calculator w;
   std::string a = "cis(2)";
   std::string b = "";
   EXPECT_ANY_THROW(w.CalculateAnswer(a, b));
 }
 
 TEST(Fall, test8) {
-  s21::Token w;
+  s21::Calculator w;
   std::string a = "cis(2)";
   std::string b = "";
   EXPECT_ANY_THROW(w.CalculateAnswer(a, b));
 }
 
 TEST(Fall, test9) {
-  s21::Token w;
+  s21::Calculator w;
   std::string a = "2+";
   std::string b = "";
   EXPECT_ANY_THROW(w.CalculateAnswer(a, b));
 }
 
 TEST(Fall, test10) {
-  s21::Token w;
+  s21::Calculator w;
   std::string a = "2. 2";
   std::string b = "";
   EXPECT_ANY_THROW(w.CalculateAnswer(a, b));
 }
 
 TEST(Fall, test11) {
-  s21::Token w;
+  s21::Calculator w;
   std::string a = "2.233.4+5";
   std::string b = "";
   EXPECT_ANY_THROW(w.CalculateAnswer(a, b));
 }
 
 TEST(Fall, test12) {
-  s21::Token w;
+  s21::Calculator w;
   std::string a = "2.233.4+5(4/3";
   std::string b = "";
   EXPECT_ANY_THROW(w.CalculateAnswer(a, b));
 }
 
 TEST(Fall, test13) {
-  s21::Token w;
+  s21::Calculator w;
   std::string a = "2.233.4+sin()+3";
   std::string b = "";
   EXPECT_ANY_THROW(w.CalculateAnswer(a, b));
 }
 
 TEST(Fall, test14) {
-  s21::Token w;
+  s21::Calculator w;
   std::string a = "2--2";
   std::string b = "";
   EXPECT_ANY_THROW(w.CalculateAnswer(a, b));
 }
 
 TEST(Fall, test15) {
-  s21::Token w;
+  s21::Calculator w;
   std::string a = "4.3-----2";
   std::string b = "";
   EXPECT_ANY_THROW(w.CalculateAnswer(a, b));
 }
 
 TEST(Fall, test16) {
-  s21::Token w;
+  s21::Calculator w;
   std::string a = "2.3.2^2";
   std::string b = "";
   EXPECT_ANY_THROW(w.CalculateAnswer(a, b));
 }
 
 TEST(Fall, test17) {
-  s21::Token w;
+  s21::Calculator w;
   std::string a = "(2.32^2)/4)";
   std::string b = "";
   EXPECT_ANY_THROW(w.CalculateAnswer(a, b));
 }
 
 TEST(Fall, test18) {
-  s21::Token w;
+  s21::Calculator w;
   std::string a = ".2-.4";
   std::string b = "";
   EXPECT_ANY_THROW(w.CalculateAnswer(a, b));
 }
 
 TEST(Fall, test19) {
-  s21::Token w;
+  s21::Calculator w;
   std::string a = "1.3*cos(2))";
   std::string b = "";
   EXPECT_ANY_THROW(w.CalculateAnswer(a, b));
 }
 
 TEST(Fall, test20) {
-  s21::Token w;
+  s21::Calculator w;
   std::string a = "1.3*cos((2)";
   std::string b = "";
   EXPECT_ANY_THROW(w.CalculateAnswer(a, b));

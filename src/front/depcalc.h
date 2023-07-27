@@ -10,11 +10,11 @@ class DepCalc;
 class DepCalc : public QDialog {
   Q_OBJECT
 
- public:
+public:
   explicit DepCalc(QWidget *parent = nullptr);
   ~DepCalc();
 
- private slots:
+private slots:
   void on_closeButton_clicked();
 
   void on_periodStartInputButton_clicked();
@@ -27,8 +27,8 @@ class DepCalc : public QDialog {
 
   void on_equalButton_clicked();
 
- private:
+private:
   Ui::DepCalc *ui;
 };
 
-#endif  // DEPCALC_H
+#endif // DEPCALC_H

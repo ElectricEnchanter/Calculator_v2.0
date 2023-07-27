@@ -6,12 +6,9 @@ ifeq ($(OS), Linux)
   LIBS=--coverage -lgtest -lpthread 
   CHECK_LEAKS=valgrind --leak-check=full --show-reachable=yes --show-leak-kinds=all --track-origins=yes --log-file=log.txt
 else
-  APPPLACE=~/Applications
-  APPNAME=SmartCalc_v2.app
   LIBS=--coverage -lgtest
   CHECK_LEAKS= leaks -atExit -- 
 endif
-
 
 all: install run
 
@@ -26,26 +23,21 @@ gcov_report: test
 	open ./report/index.html
 
 style:
-	cp ../assets/.clang-format .
-	clang-format -n *.cc *.h
-	cd calculator
-	clang-format -n *.cc *.h 
-	rm .clang-format
+	clang-format -n back/*.cc back/*.h
+	clang-format -n front/*.cpp front/*.h
 
 test: clean
-	$(CC) $(FLAGS) Token.cc calculator_tests.cc $(LIBS) && ./a.out
+	$(CC) $(FLAGS) ./back/Token.cc ./back/Calculator.cc calculator_tests.cc $(LIBS) && ./a.out
 
 leaks: test
 	$(CHECK_LEAKS) ./a.out
 
 install: uninstall
 	@mkdir -p ../build
-	@qmake6 -o ../build/Makefile ./calculator/SmartCalc_v2.pro
-	@make -C ../build > /dev/null 2>&1;
+	@qmake6 -o ../build/Makefile ./front/SmartCalc_v2.pro
+	@make -C ../build 
 
-ifeq ($(OS), Linux)
-	echo 'dsa'
-else
+ifneq ($(OS), Linux)
 	@mkdir -p ~/Applications ; cp -r ./../build/SmartCalc_v2.app ~/Applications/SmartCalc_v2.app
 endif
 

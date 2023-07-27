@@ -68,7 +68,7 @@ void LoanCalc::on_equalButton_clicked() {
            << "Июль";
 
     for (int i = 0; i < month; i++) {
-      ticks.push_back(i);  //тут вектор даблов
+      ticks.push_back(i); //тут вектор даблов
       mesac.push_back(labels[i % 12]);
     }
 
@@ -89,7 +89,7 @@ void LoanCalc::on_equalButton_clicked() {
 
     // prepare y axis:
     ui->widget->yAxis->setRange(0, 10000);
-    ui->widget->yAxis->setPadding(5);  // a bit more space to the left border
+    ui->widget->yAxis->setPadding(5); // a bit more space to the left border
     ui->widget->yAxis->setLabel("Ежемесячный платеж");
     ui->widget->yAxis->setBasePen(QPen(Qt::white));
     ui->widget->yAxis->setTickPen(QPen(Qt::white));

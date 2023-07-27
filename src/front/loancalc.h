@@ -16,24 +16,24 @@ class LoanCalc;
 class LoanCalc : public QDialog {
   Q_OBJECT
 
- public:
+public:
   explicit LoanCalc(QWidget *parent = nullptr);
   ~LoanCalc();
   QCPBars *procents;
   QCPBars *restSum;
 
- private slots:
+private slots:
   void on_equalButton_clicked();
 
   void on_eraseButton_clicked();
 
   void on_exitButton_clicked();
 
- private:
+private:
   Ui::LoanCalc *ui;
   QVector<double> ticks;
   QVector<QString> labels;
   QVector<QString> mesac;
 };
 
-#endif  // LOANCALC_H
+#endif // LOANCALC_H
