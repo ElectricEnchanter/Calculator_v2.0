@@ -24,11 +24,11 @@ QT_END_NAMESPACE
 class MainWindow : public QMainWindow {
   Q_OBJECT
 
- public:
+public:
   MainWindow(QWidget *parent, s21::Controller &controller);
   ~MainWindow();
 
- private slots:
+private slots:
 
   void digit(QAbstractButton *btm);
 
@@ -46,14 +46,14 @@ class MainWindow : public QMainWindow {
 
   void on_AC_clicked();
 
- protected:
+protected:
   void keyPressEvent(QKeyEvent *event);
 
- private:
+private:
   Ui::MainWindow *ui;
+  s21::Controller *controller_;
   Graph graph;
   LoanCalc loancalc;
   DepCalc depcalc;
-  s21::Controller *controller_;
 };
-#endif  // MAINWINDOW_H
+#endif // MAINWINDOW_H

@@ -7,6 +7,7 @@
 #include <regex>
 #include <sstream>
 #include <stack>
+#include <vector>
 
 #include "Token.h"
 
@@ -24,7 +25,10 @@ template <class... Ts> overloaded(Ts...) -> overloaded<Ts...>;
 class Calculator {
 public:
   double GetAnswer();
+  std::vector<double> GetxСoordinates();
+  std::vector<double> GetyСoordinates();
   void CalculateAnswer(std::string input, std::string input_x);
+  void CalculateGraph(std::string input, std::string input_x);
 
 private:
   double answer_{NAN};
@@ -32,6 +36,8 @@ private:
 
   std::string input_;
   std::string input_x_;
+
+  std::vector<double> xСoordinates_, yСoordinates_;
 
   std::map<std::string, Token> token_map_;
   static std::queue<Token> queue_;
@@ -51,6 +57,7 @@ private:
   double PopFromResult();
   void PushNumberToStack(double value);
   void PushTokenToQueue(std::string input);
+  void ClearСoordinates();
 };
 
 int YmdToMord(const char *date);

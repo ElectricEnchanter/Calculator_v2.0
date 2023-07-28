@@ -248,4 +248,23 @@ void s21::Calculator::PushTokenToQueue(std::string input) {
     throw std::string("INVALID CHARACTER(S)");
   queue_.push(found_token->second);
 }
+
+void s21::Calculator::ClearСoordinates() {
+  xСoordinates_.clear();
+  yСoordinates_.clear();
+};
+
+void s21::Calculator::CalculateGraph(std::string input, std::string input_x) {
+  ClearСoordinates();
+  double dot = stod(input_x);
+  for (double x = -dot; x <= fabs(dot); x += 0.01) {
+    CalculateAnswer(input, std::to_string(x));
+    xСoordinates_.push_back(x);
+    yСoordinates_.push_back(GetAnswer());
+  }
+}
+
+std::vector<double> s21::Calculator::GetxСoordinates() { return xСoordinates_; }
+std::vector<double> s21::Calculator::GetyСoordinates() { return yСoordinates_; }
+
 } // namespace s21

@@ -4,7 +4,8 @@
 #include "ui_mainwindow.h"
 
 MainWindow::MainWindow(QWidget *parent, s21::Controller &controller)
-    : QMainWindow(parent), ui(new Ui::MainWindow), controller_(&controller) {
+    : QMainWindow(parent), ui(new Ui::MainWindow), controller_(&controller),
+      graph(parent, controller) {
   ui->setupUi(this);
   ui->dockWidget->hide();
   ui->dockWidget_2->hide();

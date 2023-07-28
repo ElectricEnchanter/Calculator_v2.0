@@ -2,9 +2,9 @@
 
 #include "ui_graph.h"
 
-Graph::Graph(QWidget *parent) : QDialog(parent), ui(new Ui::Graph) {
+Graph::Graph(QWidget *parent, s21::Controller &con)
+    : QDialog(parent), ui(new Ui::Graph), con_(&con) {
   ui->setupUi(this);
-  h = 0.01;
 
   ui->widget->xAxis->setRange(-15, 15);
   ui->widget->yAxis->setRange(-15, 15);
@@ -12,7 +12,7 @@ Graph::Graph(QWidget *parent) : QDialog(parent), ui(new Ui::Graph) {
   ui->widget->addGraph();
   ui->widget->setInteraction(QCP::iRangeZoom, true);
   ui->widget->setInteraction(QCP::iRangeDrag, true);
-  ui->widget->graph(0)->addData(x, y);
+
   ui->widget->replot();
 }
 
@@ -28,27 +28,22 @@ void Graph::on_erase_clicked() {
 void Graph::on_buildButton_clicked() {
   std::string input = ui->inputLine->text().toStdString();
   std::string input_x = ui->inputXLine->text().toStdString();
-  s21::Calculator view;
   double Dot = stod(input_x);
   ui->widget->xAxis->setRange(-Dot, Dot);
   ui->widget->yAxis->setRange(-Dot, Dot);
   ui->widget->clearGraphs();
-  x.clear();
-  y.clear();
 
-  std::string x_value = std::to_string(X);
   try {
-    for (X = -Dot; X <= fabs(Dot); X += h) {
-      x_value = std::to_string(X);
-      view.CalculateAnswer(input, x_value);
-      x.push_back(X);
-      y.push_back(view.GetAnswer());
-    }
+    con_->CalculateGraph(input, input_x);
+
     ui->widget->addGraph();
     ui->widget->graph(0)->setScatterStyle(
         QCPScatterStyle(QCPScatterStyle::ssDot, Qt::red, Qt::red, 30));
     ui->widget->graph(0)->setLineStyle(QCPGraph::lsNone);
-    ui->widget->graph(0)->addData(x, y);
+    std::vector<double> x = con_->GetxСoordinates();
+    std::vector<double> y = con_->GetyСoordinates();
+    ui->widget->graph(0)->addData(QVector<double>(x.begin(), x.end()),
+                                  QVector<double>(y.begin(), y.end()));
     ui->widget->replot();
 
   } catch (std::string error_message) {

@@ -3,7 +3,8 @@
 
 #include <QDialog>
 
-#include "../back/Calculator.h"
+//#include "../back/Calculator.h"
+#include "../back/Controller.h"
 
 namespace Ui {
 class Graph;
@@ -12,22 +13,21 @@ class Graph;
 class Graph : public QDialog {
   Q_OBJECT
 
- public:
-  explicit Graph(QWidget *parent = nullptr);
+public:
+  Graph(QWidget *parent, s21::Controller &con);
+
   ~Graph();
 
- private slots:
+private slots:
   void on_exit_clicked();
 
   void on_erase_clicked();
 
   void on_buildButton_clicked();
 
- private:
+private:
   Ui::Graph *ui;
-  double xBegin, xEnd, h, X;
-  int N;
-  QVector<double> x, y;
+  s21::Controller *con_;
 };
 
-#endif  // GRAPH_H
+#endif // GRAPH_H
