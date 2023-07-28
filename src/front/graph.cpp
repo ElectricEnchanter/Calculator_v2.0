@@ -35,7 +35,6 @@ void Graph::on_buildButton_clicked() {
 
   try {
     con_->CalculateGraph(input, input_x);
-
     ui->widget->addGraph();
     ui->widget->graph(0)->setScatterStyle(
         QCPScatterStyle(QCPScatterStyle::ssDot, Qt::red, Qt::red, 30));

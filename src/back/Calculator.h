@@ -1,5 +1,5 @@
-#ifndef BACK_CALCULATOR_H_
-#define BACK_CALCULATOR_H_
+#ifndef CPP3_CALCULATOR_V2_0_BACK_CALCULATOR_H_
+#define CPP3_CALCULATOR_V2_0_BACK_CALCULATOR_H_
 
 #include <cmath>
 #include <map>
@@ -25,10 +25,10 @@ template <class... Ts> overloaded(Ts...) -> overloaded<Ts...>;
 class Calculator {
 public:
   double GetAnswer();
-  std::vector<double> GetxСoordinates();
-  std::vector<double> GetyСoordinates();
-  void CalculateAnswer(std::string input, std::string input_x);
-  void CalculateGraph(std::string input, std::string input_x);
+  std::vector<double> GetCoordinatesX();
+  std::vector<double> GetCoordinatesY();
+  void CalculateAnswer(std::string, std::string);
+  void CalculateGraph(std::string, std::string);
 
 private:
   double answer_{NAN};
@@ -37,18 +37,18 @@ private:
   std::string input_;
   std::string input_x_;
 
-  std::vector<double> xСoordinates_, yСoordinates_;
+  std::vector<double> coordinates_x_, coordinates_y_;
 
   std::map<std::string, Token> token_map_;
   static std::queue<Token> queue_;
   static std::stack<Token> stack_token_;
   static std::stack<Token> stack_number_;
 
-  void CreateTokenMap(std::map<std::string, Token> &temp_map);
-  std::string ReadToken(std::string &input, size_t &start_index) const;
+  void CreateTokenMap(std::map<std::string, Token> &);
+  std::string ReadToken(std::string &, size_t &) const;
   void ConvertToLower();
-  void FindUnaries(std::string input);
-  void Validator(std::string input, std::string output);
+  void FindUnaries(std::string);
+  void Validator(std::string, std::string);
   void Parser();
   void Counting();
   void Conditions();
@@ -64,4 +64,4 @@ int YmdToMord(const char *date);
 
 }; // namespace s21
 
-#endif // BACK_CALCULATOR_H_
+#endif // CPP3_CALCULATOR_V2_0_BACK_CALCULATOR_H_

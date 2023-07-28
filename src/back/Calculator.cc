@@ -250,8 +250,8 @@ void s21::Calculator::PushTokenToQueue(std::string input) {
 }
 
 void s21::Calculator::ClearСoordinates() {
-  xСoordinates_.clear();
-  yСoordinates_.clear();
+  coordinates_x_.clear();
+  coordinates_y_.clear();
 };
 
 void s21::Calculator::CalculateGraph(std::string input, std::string input_x) {
@@ -259,12 +259,16 @@ void s21::Calculator::CalculateGraph(std::string input, std::string input_x) {
   double dot = stod(input_x);
   for (double x = -dot; x <= fabs(dot); x += 0.01) {
     CalculateAnswer(input, std::to_string(x));
-    xСoordinates_.push_back(x);
-    yСoordinates_.push_back(GetAnswer());
+    coordinates_x_.push_back(x);
+    coordinates_y_.push_back(GetAnswer());
   }
 }
 
-std::vector<double> s21::Calculator::GetxСoordinates() { return xСoordinates_; }
-std::vector<double> s21::Calculator::GetyСoordinates() { return yСoordinates_; }
+std::vector<double> s21::Calculator::GetCoordinatesX() {
+  return coordinates_x_;
+}
+std::vector<double> s21::Calculator::GetCoordinatesY() {
+  return coordinates_y_;
+}
 
 } // namespace s21

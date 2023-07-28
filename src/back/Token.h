@@ -1,5 +1,5 @@
-#ifndef BACK_TOKEN_H_
-#define BACK_TOKEN_H_
+#ifndef CPP3_CALCULATOR_V2_0_BACK_TOKEN_H_
+#define CPP3_CALCULATOR_V2_0_BACK_TOKEN_H_
 
 #include <functional>
 #include <initializer_list>
@@ -66,4 +66,4 @@ int YmdToMord(const char *date);
 
 }; // namespace s21
 
-#endif // BACK_TOKEN_H_
+#endif // CPP3_CALCULATOR_V2_0_BACK_TOKEN_H_
