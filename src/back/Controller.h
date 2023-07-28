@@ -26,7 +26,7 @@ public:
   std::string CalculateGraph(std::string input, std::string input_x) {
     try {
       cal_->CalculateGraph(input, input_x);
-	  return "";
+      return "";
     } catch (std::string error_message) {
       return error_message;
     }
