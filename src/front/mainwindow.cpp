@@ -4,7 +4,9 @@
 #include "ui_mainwindow.h"
 
 MainWindow::MainWindow(QWidget *parent, s21::Controller &controller)
-    : QMainWindow(parent), ui(new Ui::MainWindow), controller_(&controller),
+    : QMainWindow(parent),
+      ui(new Ui::MainWindow),
+      controller_(&controller),
       graph(parent, controller) {
   ui->setupUi(this);
   ui->dockWidget->hide();
@@ -12,7 +14,12 @@ MainWindow::MainWindow(QWidget *parent, s21::Controller &controller)
 
   connect(ui->digit, &QButtonGroup::buttonClicked, this, &MainWindow::digit);
   connect(ui->digit2, &QButtonGroup::buttonClicked, this, &MainWindow::digit2);
-  ui->XInput->setValidator(new QIntValidator(0, 100000, this));
+
+  QLocale lo(QLocale::C);
+  lo.setNumberOptions(QLocale::RejectGroupSeparator);
+  auto val = new QDoubleValidator(0, 1000000, 2, this);
+  val->setLocale(lo);
+  ui->input->setValidator(val);
 }
 
 MainWindow::~MainWindow() { delete ui; }
