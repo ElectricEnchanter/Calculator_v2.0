@@ -25,6 +25,8 @@ HEADERS += \
     mainwindow.h \
     qcustomplot.h
 
+INCLUDEPATH += ../back
+
 FORMS += \
     depcalc.ui \
     graph.ui \

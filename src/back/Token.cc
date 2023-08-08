@@ -8,7 +8,7 @@ s21::Token::Token(const std::string &name, Priority priority,
     : name_(name), priority_(priority), associativity_(associativity),
       type_(type), function_(function){};
 
-std::string s21::Token::GetName() const { return name_; }
+const std::string &s21::Token::GetName() const { return name_; }
 
 s21::Priority s21::Token::GetPriority() const { return priority_; }
 

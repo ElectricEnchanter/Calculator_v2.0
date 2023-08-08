@@ -10,7 +10,7 @@
 #include <QVariantList>
 #include <QVector>
 
-#include "../back/Controller.h"
+#include "Controller.h"
 #include "depcalc.h"
 #include "graph.h"
 #include "loancalc.h"

@@ -23,12 +23,9 @@ void s21::Calculator::CalculateAnswer(std::string input, std::string input_x) {
 void s21::Calculator::CleanStacks() {
   if (!stack_number_.empty() || !stack_token_.empty())
     throw std::string("INVALID CHARACTER(S)");
-  while (!queue_.empty())
-    queue_.pop();
-  while (!stack_token_.empty())
-    stack_token_.pop();
-  while (!stack_number_.empty())
-    stack_number_.pop();
+  queue_ = std::queue<Token>();
+  stack_token_ = std::stack<Token>();
+  stack_number_ = std::stack<Token>();
 }
 
 void s21::Calculator::CreateTokenMap(
@@ -65,7 +62,7 @@ void s21::Calculator::CreateTokenMap(
   token_map.insert(list);
 }
 
-std::string s21::Calculator::ReadToken(std::string &input,
+std::string s21::Calculator::ReadToken(const std::string &input,
                                        size_t &index) const {
   std::regex pattern;
   if (isdigit(input.at(index)))
@@ -86,7 +83,8 @@ void s21::Calculator::ConvertToLower() {
   std::transform(input_.begin(), input_.end(), input_.begin(), ::tolower);
 }
 
-void s21::Calculator::Validator(std::string input, std::string input_x) {
+void s21::Calculator::Validator(const std::string &input,
+                                const std::string &input_x) {
   if (!input_x.empty())
     x_value_ = stod(input_x);
 
@@ -115,24 +113,22 @@ void s21::Calculator::Validator(std::string input, std::string input_x) {
   }
 }
 
-void s21::Calculator::FindUnaries(std::string input) {
+void s21::Calculator::FindUnaries(const std::string &input) {
   for (size_t index = 0; input.length() > index; ++index) {
     try {
       if (input.at(index) == '.')
         throw std::string("INVALID CHARACTER(S)");
       std::string token = ReadToken(input, index);
       if (isdigit(token.at(0))) {
-        Token result(token, kDefault, kNone, kNumber, stod(token));
-        queue_.push(result);
+        queue_.emplace(token, kDefault, kNone, kNumber, stod(token));
       } else if (token == " ")
         continue;
       else if (index == 0 && (token == "+" || token == "-")) {
         if (token == "+")
           continue;
         else if (token == "-") {
-          Token a("-", kLow, kRight, kUnaryPrefixOperator,
-                  std::negate<double>());
-          queue_.push(a);
+          queue_.emplace("-", kLow, kRight, kUnaryPrefixOperator,
+                         std::negate<double>());
         }
       } else if (token == "(") {
         PushTokenToQueue(token);
@@ -144,13 +140,13 @@ void s21::Calculator::FindUnaries(std::string input) {
                   std::negate<double>());
           queue_.push(a);
         } else if (isdigit(token.at(0))) {
-          Token result(token, kDefault, kNone, kNumber, stod(token));
-          queue_.push(result);
+          queue_.emplace(token, kDefault, kNone, kNumber, stod(token));
         } else
           PushTokenToQueue(token);
       } else
         PushTokenToQueue(token);
     } catch (std::string error_message) {
+      ;
     }
   }
 }
@@ -229,12 +225,11 @@ double s21::Calculator::PopFromResult() {
     throw std::string("NOT ENOUGH NUMBERS");
 
   s21::Token number = stack_number_.top();
-  std::string name = number.GetName();
   stack_number_.pop();
-  return stod(name);
+  return stod(number.GetName());
 }
 
-void s21::Calculator::PushNumberToStack(double value) {
+void s21::Calculator::PushNumberToStack(const double &value) {
   std::ostringstream token;
   token << value;
   std::string name = token.str();
@@ -242,7 +237,7 @@ void s21::Calculator::PushNumberToStack(double value) {
   stack_number_.push(result);
 }
 
-void s21::Calculator::PushTokenToQueue(std::string input) {
+void s21::Calculator::PushTokenToQueue(const std::string &input) {
   auto found_token = token_map_.find(input);
   if (found_token == token_map_.end())
     throw std::string("INVALID CHARACTER(S)");
@@ -264,10 +259,11 @@ void s21::Calculator::CalculateGraph(std::string input, std::string input_x) {
   }
 }
 
-std::vector<double> s21::Calculator::GetCoordinatesX() {
+const std::vector<double> &s21::Calculator::GetCoordinatesX() {
   return coordinates_x_;
 }
-std::vector<double> s21::Calculator::GetCoordinatesY() {
+
+const std::vector<double> &s21::Calculator::GetCoordinatesY() {
   return coordinates_y_;
 }
 

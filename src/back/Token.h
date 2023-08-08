@@ -41,14 +41,13 @@ using function_variant =
 
 class Token {
 public:
-  Token() = default;
   Token(const std::string &name, Priority priority, Associativity associativity,
         Type type, function_variant function);
   Token(const Token &) = default;
   Token(const Token &&) = delete;
   ~Token() = default;
 
-  std::string GetName() const;
+  const std::string &GetName() const;
   Priority GetPriority() const;
   Associativity GetAssociativity() const;
   Type GetType() const;

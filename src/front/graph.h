@@ -3,8 +3,7 @@
 
 #include <QDialog>
 
-//#include "../back/Calculator.h"
-#include "../back/Controller.h"
+#include "Controller.h"
 
 namespace Ui {
 class Graph;

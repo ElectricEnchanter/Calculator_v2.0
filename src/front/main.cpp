@@ -1,6 +1,6 @@
 #include <QApplication>
 
-#include "../back/Controller.h"
+#include "Controller.h"
 #include "graph.h"
 #include "mainwindow.h"
 

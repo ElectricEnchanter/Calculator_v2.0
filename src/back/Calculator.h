@@ -25,8 +25,8 @@ template <class... Ts> overloaded(Ts...) -> overloaded<Ts...>;
 class Calculator {
 public:
   double GetAnswer();
-  std::vector<double> GetCoordinatesX();
-  std::vector<double> GetCoordinatesY();
+  const std::vector<double> &GetCoordinatesX();
+  const std::vector<double> &GetCoordinatesY();
   void CalculateAnswer(std::string, std::string);
   void CalculateGraph(std::string, std::string);
 
@@ -45,22 +45,20 @@ private:
   static std::stack<Token> stack_number_;
 
   void CreateTokenMap(std::map<std::string, Token> &);
-  std::string ReadToken(std::string &, size_t &) const;
+  std::string ReadToken(const std::string &, size_t &) const;
   void ConvertToLower();
-  void FindUnaries(std::string);
-  void Validator(std::string, std::string);
+  void FindUnaries(const std::string &);
+  void Validator(const std::string &, const std::string &);
   void Parser();
   void Counting();
   void Conditions();
   void SetAnswer();
   void CleanStacks();
   double PopFromResult();
-  void PushNumberToStack(double value);
-  void PushTokenToQueue(std::string input);
+  void PushNumberToStack(const double &value);
+  void PushTokenToQueue(const std::string &input);
   void ClearСoordinates();
 };
-
-int YmdToMord(const char *date);
 
 }; // namespace s21
 

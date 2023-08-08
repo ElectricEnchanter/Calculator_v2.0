@@ -20,7 +20,7 @@ public:
     if (fmod(result, 1) == 0)
       return std::to_string(static_cast<int>(result));
     else
-      return std::to_string(cal_->GetAnswer());
+      return std::to_string(result);
   }
 
   std::string CalculateGraph(std::string input, std::string input_x) {
@@ -32,8 +32,12 @@ public:
     }
   }
 
-  std::vector<double> GetCoordinatesX() { return cal_->GetCoordinatesX(); }
-  std::vector<double> GetCoordinatesY() { return cal_->GetCoordinatesY(); }
+  const std::vector<double> &GetCoordinatesX() {
+    return cal_->GetCoordinatesX();
+  }
+  const std::vector<double> &GetCoordinatesY() {
+    return cal_->GetCoordinatesY();
+  }
 
 private:
   Calculator *cal_;
